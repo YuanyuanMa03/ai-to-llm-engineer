@@ -1,118 +1,116 @@
-# AI 手帐 · 大模型工程师冒险地图
+<div align="center">
 
-<div class="hero-spread">
-  <section class="hero-copy">
-    <h2>把大模型，<br>学成你的主线任务。</h2>
-    <p>不是收藏夹吃灰指南。16 个关卡，从梯度下降一路打到 Agent；每关都留下能讲、能跑、能写进简历的战利品。</p>
-    <div class="hero-actions">
-      <a class="journal-button" href="#/01-fundamentals/01-math" data-today-link><span data-continue-label>开始第 1 关</span> →</a>
-      <a class="journal-button journal-button--ghost" href="#/README?id=adventure-map">先看冒险地图</a>
-    </div>
-    <p class="margin-joke">别慌，这本手帐会帮你升级，但不会替你面试。那样违法物理定律。</p>
-  </section>
+# AI 手帐
 
-  <section class="hero-dashboard" aria-label="学习进度">
-    <div class="progress-note">
-      <p class="progress-note__label">我的进度</p>
-      <div class="progress-note__row">
-        <strong data-home-level>Lv.1 张量见习生</strong>
-        <span data-home-xp>0 / 1600 XP</span>
-      </div>
-      <div class="progress-note__bar" aria-hidden="true"><i data-home-progress-bar></i></div>
-      <p class="progress-note__streak">▣ <span data-home-streak>连续学习 0 天</span> · 已完成 <span data-home-completed>0 / 16 关</span></p>
-    </div>
-    <div class="today-note">
-      <p class="today-note__title"><span>今天先做这一页</span><span>→</span></p>
-      <a class="today-note__task" href="#/01-fundamentals/01-math" data-today-link>
-        <span><b data-today-code>01-1</b>　<span data-today-title>数学基础：线代 / 概率 / 微积分</span></span>
-        <span aria-hidden="true">›</span>
-      </a>
-      <p class="today-note__objective">目标：<span data-today-objective>让梯度不再像玄学，先把模型的地基焊牢。</span></p>
-    </div>
-  </section>
+### 把大模型，学成你的主线任务。
+
+一份面向中文学习者与求职者的「可通关」大模型工程教程。<br>
+从数学地基、Transformer、预训练与对齐，一路打到 RAG、Agent、部署和 MCP。
+
+[![在线体验](https://img.shields.io/badge/在线体验-打开手帐-EF4A43?style=for-the-badge&logo=githubpages&logoColor=white)](https://yuanyuanma03.github.io/ai-to-llm-engineer/)
+[![面试试炼](https://img.shields.io/badge/面试试炼-31_道题-12305A?style=for-the-badge)](https://yuanyuanma03.github.io/ai-to-llm-engineer/quiz/)
+[![课程关卡](https://img.shields.io/badge/课程关卡-16_关-F2C84B?style=for-the-badge&labelColor=12305A)](#学习路线)
+[![Language](https://img.shields.io/badge/Language-中文-16847D?style=for-the-badge)](#)
+
+**[开始学习](https://yuanyuanma03.github.io/ai-to-llm-engineer/)** · **[打开面试题库](https://yuanyuanma03.github.io/ai-to-llm-engineer/quiz/)** · **[练习手撕代码](https://yuanyuanma03.github.io/ai-to-llm-engineer/#/hand-coding)**
+
 </div>
 
-<section class="home-section" id="adventure-map">
-  <h2>你的冒险地图</h2>
-  <p class="section-intro">路线不是“必须从左往右服刑”。有基础就跳关，没基础就从补给站出发；系统会把你的通关状态留在本地浏览器里。</p>
+<a href="https://yuanyuanma03.github.io/ai-to-llm-engineer/">
+  <img src="output/playwright/readme-home.webp" alt="AI 手帐首页：学习进度、今日任务与六阶段冒险地图" width="100%">
+</a>
 
-  <div class="adventure-map" role="region" aria-label="六阶段学习地图" tabindex="0">
-    <ol class="stage-route">
-      <li class="stage-node" data-stage="1">
-        <a href="#/01-fundamentals/README">
-          <span class="stage-node__icon">∇</span>
-          <span class="stage-node__name">01<br>基础补给站</span>
-          <span class="stage-node__status" data-stage-status>未解锁 0 / 3</span>
-        </a>
-      </li>
-      <li class="stage-node" data-stage="2">
-        <a href="#/02-deep-learning/README">
-          <span class="stage-node__icon">QKᵀ</span>
-          <span class="stage-node__name">02<br>Transformer 山谷</span>
-          <span class="stage-node__status" data-stage-status>未解锁 0 / 3</span>
-        </a>
-      </li>
-      <li class="stage-node" data-stage="3">
-        <a href="#/03-pretraining/README">
-          <span class="stage-node__icon">10¹²</span>
-          <span class="stage-node__name">03<br>预训练矿场</span>
-          <span class="stage-node__status" data-stage-status>未解锁 0 / 3</span>
-        </a>
-      </li>
-      <li class="stage-node" data-stage="4">
-        <a href="#/04-finetuning/README">
-          <span class="stage-node__icon">ΔW</span>
-          <span class="stage-node__name">04<br>对齐试炼场</span>
-          <span class="stage-node__status" data-stage-status>未解锁 0 / 3</span>
-        </a>
-      </li>
-      <li class="stage-node" data-stage="5">
-        <a href="#/05-deployment/README">
-          <span class="stage-node__icon">&lt;/&gt;</span>
-          <span class="stage-node__name">05<br>部署发射台</span>
-          <span class="stage-node__status" data-stage-status>未解锁 0 / 3</span>
-        </a>
-      </li>
-      <li class="stage-node" data-stage="6">
-        <a href="#/06-frontier/README">
-          <span class="stage-node__icon">MCP</span>
-          <span class="stage-node__name">06<br>前沿观测站</span>
-          <span class="stage-node__status" data-stage-status>未解锁 0 / 1</span>
-        </a>
-      </li>
-    </ol>
-  </div>
-</section>
+> 不是资源链接农场，也不是“看完等于学会”的电子安慰剂。这里把知识拆成关卡，把练习变成任务，把每次真正掌握变成可以盖章的进度。
 
-<section class="home-section">
-  <div class="daily-layout">
-    <div>
-      <h2>今天先做这一页</h2>
-      <p class="section-intro">每天推进一页，比周日晚上对着 47 个收藏链接忏悔更有效。</p>
-      <article class="daily-card">
-        <span class="daily-card__flag" data-today-code>01-1</span>
-        <h3 data-today-title>数学基础：线代 / 概率 / 微积分</h3>
-        <p data-today-objective>让梯度不再像玄学，先把模型的地基焊牢。</p>
-        <div class="daily-meta">
-          <span>◷ 预计 25 分钟</span>
-          <span>☑ 随堂小测</span>
-          <span>⌁ 可运行代码</span>
-        </div>
-        <a class="journal-button" href="#/01-fundamentals/01-math" data-today-link>开始学习 →</a>
-      </article>
-    </div>
-    <aside class="daily-aside">学不会？别跳关。<br>每一关的理解，<br>都是后面面试题的底气。<br><br>—— 来自未来不慌的你</aside>
-  </div>
-</section>
+## 为什么是一本「AI 手帐」
 
-<section class="home-section">
-  <h2>通关后，你会带走什么</h2>
-  <p class="section-intro">参考 Microsoft AI-For-Beginners 的“课前摸底—概念—实验—测验”教学闭环，再加上大模型工程岗位真正要验收的四类产出。</p>
-  <ul class="loot-strip">
-    <li><b>系统掌握 LLM 全流程</b><span>从原理到工程落地，不再只会背名词。</span></li>
-    <li><b>面试有底气</b><span>每关都配八股、手撕与追问题。</span></li>
-    <li><b>能讲能跑的战利品</b><span>代码、实验和项目证据都能拿出来。</span></li>
-    <li><b>简历亮点</b><span>把“学过”换成可复现、可验收的项目。</span></li>
-  </ul>
-  <p class="source-note">教学结构与部分手绘素材参考 <a href="https://github.com/microsoft/AI-For-Beginners" target="_blank" rel="noopener">Microsoft AI-For-Beginners</a>（MIT）；本教程面向大模型工程师求职场景重新组织与创作。</p>
-</section>
+学习大模型最容易出现一种幻觉：收藏了 47 篇文章，于是感觉自己已经懂了 47 篇。AI 手帐想做的，是把这种“知识囤积”改造成一条有输入、有动作、有验收的工程路线。
+
+| 你会得到 | 网页里如何实现 |
+|---|---|
+| **一条完整路线** | 6 个阶段、16 个课程关卡，从数学基础到 MCP |
+| **真实学习反馈** | 任务清单、XP、等级、连续学习天数与通关印章 |
+| **能跑的工程练习** | 每课最小实现、在线运行入口与 10 道手撕代码题 |
+| **能讲清的面试能力** | 高频追问、易错点、31 道随机题卡与掌握度自评 |
+| **能写进简历的证据** | 每阶段都给出项目方向、交付物与验收口径 |
+
+## 网页里有什么
+
+### 课程不是文章列表，而是一张可推进的任务地图
+
+- 首页会根据本地进度推荐下一关，不用每天重新思考“我该学什么”。
+- 每关必须完成「读懂直觉 / 跑通代码 / 回答面试题」三项任务才能盖章。
+- XP、等级、通关状态和连续学习天数保存在浏览器本地，无需注册账号。
+- 所有课程都有上一关 / 下一关导航，学到一半不会掉进链接迷宫。
+
+<a href="https://yuanyuanma03.github.io/ai-to-llm-engineer/#/01-fundamentals/01-math">
+  <img src="output/playwright/readme-lesson.webp" alt="AI 手帐课程页：教程正文、学习路线与本关任务卡" width="100%">
+</a>
+
+### 每一关都有明确的学习闭环
+
+```text
+课前摸底  →  直觉解释  →  公式与最小实现  →  易错点
+    →  面试追问  →  简历项目  →  挑战任务  →  课后验收
+```
+
+内容参考 Microsoft AI-For-Beginners 的教学闭环，并围绕大模型工程师岗位重新组织：不只告诉你“这是什么”，还要回答“为什么这样设计、怎么跑通、面试怎么问、最终留下什么证据”。
+
+## 学习路线
+
+| 阶段 | 关卡 | 最终战利品 |
+|---|---|---|
+| **01 · 基础补给站** | [数学基础](https://yuanyuanma03.github.io/ai-to-llm-engineer/#/01-fundamentals/01-math) · [Python 与数据栈](https://yuanyuanma03.github.io/ai-to-llm-engineer/#/01-fundamentals/02-python) · [机器学习范式](https://yuanyuanma03.github.io/ai-to-llm-engineer/#/01-fundamentals/03-ml-basics) | 看懂公式，写出向量化实现，讲清训练与评估 |
+| **02 · Transformer 山谷** | [反向传播](https://yuanyuanma03.github.io/ai-to-llm-engineer/#/02-deep-learning/01-nn) · [CNN / RNN](https://yuanyuanma03.github.io/ai-to-llm-engineer/#/02-deep-learning/02-cnn-rnn) · [Transformer](https://yuanyuanma03.github.io/ai-to-llm-engineer/#/02-deep-learning/03-transformer) | 手写 Attention，解释计算图与架构取舍 |
+| **03 · 预训练矿场** | [Tokenizer](https://yuanyuanma03.github.io/ai-to-llm-engineer/#/03-pretraining/01-tokenizer) · [Decoder-only / MoE](https://yuanyuanma03.github.io/ai-to-llm-engineer/#/03-pretraining/02-architecture) · [Scaling Laws](https://yuanyuanma03.github.io/ai-to-llm-engineer/#/03-pretraining/03-scaling-laws) | 拆开现代 LLM 的发动机舱，算清数据与算力配比 |
+| **04 · 对齐试炼场** | [SFT](https://yuanyuanma03.github.io/ai-to-llm-engineer/#/04-finetuning/01-sft) · [LoRA / QLoRA](https://yuanyuanma03.github.io/ai-to-llm-engineer/#/04-finetuning/02-peft) · [RLHF / DPO](https://yuanyuanma03.github.io/ai-to-llm-engineer/#/04-finetuning/03-alignment) | 用更少显存完成微调，解释偏好对齐的工程逻辑 |
+| **05 · 部署发射台** | [推理优化](https://yuanyuanma03.github.io/ai-to-llm-engineer/#/05-deployment/01-inference) · [RAG](https://yuanyuanma03.github.io/ai-to-llm-engineer/#/05-deployment/02-rag) · [Agent](https://yuanyuanma03.github.io/ai-to-llm-engineer/#/05-deployment/03-agent) | 构建能检索、能调用工具、能被评估的 LLM 应用 |
+| **06 · 前沿观测站** | [MCP 工具接入协议](https://yuanyuanma03.github.io/ai-to-llm-engineer/#/06-frontier/01-mcp) | 给 Agent 的工具箱装上统一接口 |
+
+## 三种打开方式
+
+### 完全小白
+
+从 [01-1 数学基础](https://yuanyuanma03.github.io/ai-to-llm-engineer/#/01-fundamentals/01-math) 开始，按地图推进。别急着跳到 Agent——地基不会因为你很有热情就自动出现。
+
+### 已有机器学习基础
+
+从 [Transformer 结构详解](https://yuanyuanma03.github.io/ai-to-llm-engineer/#/02-deep-learning/03-transformer) 开始，用每关的面试追问快速查漏补缺。
+
+### 正在准备面试
+
+直接进入 [面试试炼场](https://yuanyuanma03.github.io/ai-to-llm-engineer/quiz/) 和 [手撕代码题合集](https://yuanyuanma03.github.io/ai-to-llm-engineer/#/hand-coding)，先答题，再回到对应关卡补洞。
+
+## 本地运行
+
+项目基于 Docsify，无需安装依赖或执行构建：
+
+```bash
+git clone https://github.com/YuanyuanMa03/ai-to-llm-engineer.git
+cd ai-to-llm-engineer
+python3 -m http.server 3000
+```
+
+浏览器访问 `http://localhost:3000`。学习进度仅写入浏览器 `localStorage`，不会上传个人数据。
+
+## 内容与技术
+
+- **教学结构**：课前摸底、直觉解释、可运行实验、课后测验与求职验收。
+- **前端实现**：Docsify、原生 JavaScript、CSS、KaTeX、Prism。
+- **参考项目**：[Microsoft AI-For-Beginners](https://github.com/microsoft/AI-For-Beginners)；部分手绘知识图来自该项目，并保留来源说明。
+- **原创范围**：围绕大模型工程师求职重新规划的中文课程、工程实践、面试追问、手撕代码与游戏化学习系统，并非原项目的逐章翻译。
+
+## 一起把它写得更好
+
+- 发现知识或代码错误：欢迎提交 Issue，或通过课程页底部直接定位源文件。
+- 想补充课程：请沿用 [写作模板](TEMPLATE.md)，保证有输入、实验与验收。
+- 遇到新的面试题：欢迎在 [Discussions](https://github.com/YuanyuanMa03/ai-to-llm-engineer/discussions) 投稿。
+
+<div align="center">
+
+如果这本手帐帮你少走了一点弯路，欢迎点一颗 Star。<br>
+收藏不能替你学习，但 Star 可以提醒作者继续更新。⭐
+
+**[现在开始第 1 关 →](https://yuanyuanma03.github.io/ai-to-llm-engineer/#/01-fundamentals/01-math)**
+
+</div>

@@ -59,7 +59,7 @@
     var path = String(value || '/').split('?')[0].split('#')[0];
     path = path.replace(/\.md$/, '').replace(/\/index$/, '');
     if (path.charAt(0) !== '/') path = '/' + path;
-    if (path === '/README' || path === '') return '/';
+    if (path === '/home' || path === '') return '/';
     return path.replace(/\/$/, '') || '/';
   }
 
@@ -301,7 +301,7 @@
     var next = LESSONS[index + 1];
     var previousMarkup = previous
       ? '<a href="#' + previous.path + '"><small>← 上一关</small><b>' + previous.title + '</b></a>'
-      : '<a href="#/README?id=adventure-map"><small>← 返回</small><b>冒险地图</b></a>';
+      : '<a href="#/?id=adventure-map"><small>← 返回</small><b>冒险地图</b></a>';
     var nextMarkup = next
       ? '<a href="#' + next.path + '"><small>下一关 →</small><b>' + next.title + '</b></a>'
       : '<a href="quiz/"><small>最终试炼 →</small><b>去面试题库验收</b></a>';
@@ -339,7 +339,7 @@
     });
 
     hook.afterEach(function (html) {
-      var path = normalizePath(vm.route.file || vm.route.path);
+      var path = normalizePath(vm.route.path || vm.route.file);
       var lesson = getLesson(path);
       var extra = lessonPagination(path);
 
@@ -369,7 +369,7 @@
   var progressButton = document.getElementById('playerProgress');
   if (progressButton) {
     progressButton.addEventListener('click', function () {
-      window.location.hash = '/README?id=adventure-map';
+      window.location.hash = '/?id=adventure-map';
     });
   }
 
