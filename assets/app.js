@@ -286,6 +286,14 @@
     });
   }
 
+  function parkQuestRail() {
+    var rail = document.getElementById('questRail');
+    var toast = document.getElementById('achievementToast');
+    if (rail && rail.parentNode !== document.body) {
+      document.body.insertBefore(rail, toast || null);
+    }
+  }
+
   function lessonPagination(path) {
     var index = LESSONS.findIndex(function (lesson) { return lesson.path === path; });
     if (index < 0) return '';
@@ -323,6 +331,13 @@
   }
 
   window.aiJournalPlugin = function (hook, vm) {
+    hook.beforeEach(function (markdown) {
+      // Docsify replaces the article on every route. Move the persistent task
+      // rail out first so it can be mounted into the next article safely.
+      parkQuestRail();
+      return markdown;
+    });
+
     hook.afterEach(function (html) {
       var path = normalizePath(vm.route.file || vm.route.path);
       var lesson = getLesson(path);
