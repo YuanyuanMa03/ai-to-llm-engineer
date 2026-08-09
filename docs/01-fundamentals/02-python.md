@@ -87,15 +87,15 @@ t0 = time.time()
 s1 = 0
 for i in range(N):
     s1 += a[i] * b[i]
-t1 = time.time()
-print(f'for 循环: {t1-t0:.4f}s')
+t_for = time.time() - t0
+print(f'for 循环: {t_for:.4f}s')
 
 # 向量化(快)
 t0 = time.time()
 s2 = np.dot(a, b)
-t1 = time.time()
-print(f'向量化: {t1-t0:.4f}s')
-print(f'加速比: {(t1-t0) and "向量化快很多"}')
+t_vec = time.time() - t0
+print(f'向量化: {t_vec:.4f}s')
+print(f'加速比: {t_for/t_vec:.1f}x')   # 通常 50-100x
 ```
 
 **② 广播的实际用处:批量计算距离**
@@ -122,7 +122,7 @@ x = torch.randn(4, 3)          # 随机矩阵,正态分布
 print('形状:', x.shape)          # torch.Size([4, 3])
 print('跨 dim0 求和:', x.sum(dim=0).shape)  # torch.Size([3])
 print('reshape:', x.view(2, 6).shape)       # torch.Size([2, 6])
-print('是否 GPU:', x.cuda.is_available())   # 检查 GPU
+print('是否 GPU:', torch.cuda.is_available())   # 检查 GPU 是否可用
 ```
 
 > 💡 PyTorch 的 `dim` 等价于 numpy 的 `axis`,概念完全一致。

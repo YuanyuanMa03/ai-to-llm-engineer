@@ -6,3 +6,9 @@
 *.swp
 .vscode/
 .idea/
+
+# 依赖与构建产物(前置防御,当前项目未使用)
+node_modules/
+*.log
+dist/
+.cache/
