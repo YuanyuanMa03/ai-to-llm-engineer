@@ -3,99 +3,94 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI 手帐 · 大模型算法工程师求职路线图</title>
-  <meta name="description" content="从小白到大模型算法工程师的求职导向学习路线图:数学→深度学习→预训练→微调对齐→部署应用">
+  <meta name="theme-color" content="#f5f0e5">
+  <title>AI 手帐 · 大模型工程师冒险地图</title>
+  <meta name="description" content="16 个可通关关卡，从数学基础、Transformer 到 RAG、Agent 与 MCP，把大模型知识变成能跑、能讲、能写进简历的工程战利品。">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/themes/vue.css">
-  <style>
-    :root{
-      --paper:#fbf8f0; --ink:#23201a; --blue:#2a55b3; --red:#c63a2f;
-    }
-    body{font-family:'PingFang SC','Microsoft YaHei','Helvetica Neue',sans-serif;background:var(--paper);color:var(--ink)}
-    /* 手帐风格的标题 */
-    .markdown-section h1{font-weight:700;border-bottom:2px solid rgba(120,110,85,.4);padding-bottom:6px}
-    .markdown-section h2{color:var(--blue);border-left:5px solid var(--blue);padding-left:10px}
-    /* 便利贴/标签样式 */
-    .markdown-section blockquote{
-      border-left:4px solid var(--blue);background:rgba(228,236,255,.35);
-      padding:8px 14px;color:#3a3528;border-radius:0 4px 4px 0
-    }
-    /* 高亮强调 */
-    .markdown-section strong{color:var(--red)}
-    /* 侧边栏品牌 */
-    .app-name a{font-weight:700;color:var(--blue)!important}
-    /* 表格更紧凑 */
-    .markdown-section table{display:table;width:100%}
-    /* 在线运行浮动按钮 */
-    .run-fab{position:fixed;right:20px;bottom:20px;z-index:99;
-      display:inline-flex;align-items:center;gap:6px;
-      background:#2e8b57;color:#fff;text-decoration:none;
-      padding:10px 18px;border-radius:30px;font-size:14px;font-weight:600;
-      box-shadow:0 4px 12px -2px rgba(46,139,87,.5);transition:.18s}
-    .run-fab:hover{transform:translateY(-2px);box-shadow:0 6px 16px -2px rgba(46,139,87,.6)}
-  </style>
+  <link rel="stylesheet" href="assets/theme.css">
 </head>
 <body>
-  <div id="app">加载中…如果一直转圈,请检查网络(首次加载需拉取 Docsify)</div>
-  <a class="run-fab" href="https://jupyterlite.github.io/demo/lab/index.html" target="_blank" title="打开 JupyterLite 在线 Python 环境">▶ 在线运行代码</a>
+  <header class="journal-topbar" aria-label="主导航">
+    <a class="journal-brand" href="#/README" aria-label="AI 手帐首页">
+      <span class="journal-brand__mark" aria-hidden="true">AI</span>
+      <span>AI 手帐</span>
+    </a>
 
+    <nav class="journal-nav" aria-label="学习导航">
+      <a href="#/README?id=adventure-map">冒险地图</a>
+      <a href="quiz/">面试题库</a>
+      <a href="#/hand-coding">手撕代码</a>
+      <a href="#/about">关于</a>
+    </nav>
+
+    <button class="player-progress" id="playerProgress" type="button" aria-label="查看学习进度">
+      <span class="player-progress__level" data-player-level>Lv.1 张量见习生</span>
+      <span class="player-progress__track" aria-hidden="true"><i data-player-progress-bar></i></span>
+      <span class="player-progress__xp" data-player-xp>0 / 1600 XP</span>
+    </button>
+  </header>
+
+  <div id="app">正在翻开手帐…<br><small>如果它一直装深沉，请检查网络连接。</small></div>
+
+  <aside class="quest-rail" id="questRail" aria-labelledby="questRailTitle" hidden>
+    <div class="quest-rail__tape" aria-hidden="true"></div>
+    <p class="quest-rail__eyebrow">本关任务</p>
+    <h2 id="questRailTitle">别只划到最后假装学会</h2>
+    <label class="quest-check">
+      <input type="checkbox" data-quest="read">
+      <span><b>读懂直觉</b><small>能用自己的话复述</small></span>
+    </label>
+    <label class="quest-check">
+      <input type="checkbox" data-quest="code">
+      <span><b>跑通代码</b><small>输出不是“相信我能跑”</small></span>
+    </label>
+    <label class="quest-check">
+      <input type="checkbox" data-quest="interview">
+      <span><b>回答面试题</b><small>合上答案也能说清楚</small></span>
+    </label>
+    <p class="quest-rail__hint" data-quest-hint>勾完三项，通关按钮才营业。</p>
+    <button class="complete-lesson" id="completeLesson" type="button" disabled>完成本关 · +100 XP</button>
+    <div class="lesson-stamp" data-lesson-stamp aria-hidden="true">
+      <b>PASS</b><span>工程脑 +1</span>
+    </div>
+  </aside>
+
+  <div class="achievement-toast" id="achievementToast" role="status" aria-live="polite"></div>
+
+  <a class="run-fab" href="https://jupyterlite.github.io/demo/lab/index.html" target="_blank" rel="noopener" title="打开 JupyterLite 在线 Python 环境">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 10 7-10 7V5Z"/></svg>
+    <span>运行代码</span>
+  </a>
+
+  <script src="assets/app.js"></script>
   <script>
     window.$docsify = {
-      name: '📘 AI 手帐',
+      name: 'AI 手帐',
       repo: 'https://github.com/YuanyuanMa03/ai-to-llm-engineer',
-
-      // 侧边栏
       loadSidebar: true,
-      subMaxLevel: 3,
+      subMaxLevel: 0,
       alias: { '/.*/_sidebar.md': '/_sidebar.md' },
-
-      // 首页 = 根 README.md
       homepage: 'README.md',
-
-      // 中文搜索(本地索引)
       search: {
-        placeholder: '搜索教程',
-        noData: '没有找到结果',
+        placeholder: '搜一页救命笔记…',
+        noData: '这页还没写进手帐',
         depth: 3,
         hideOtherSidebarContent: false
       },
-
-      // 页脚
       loadFooter: '_footer.md',
-
-      // 自动跳转标题
       auto2top: true,
       relativePath: true,
-
-      // 主题色
-      themeColor: '#2a55b3',
-
-      // 备用:封面
-      coverpage: false,
-
-      plugins: [
-        // 编辑本文按钮
-        function(hook, vm) {
-          hook.afterEach(function(html) {
-            if (/README/.test(vm.route.file)) return html;
-            var url = 'https://github.com/YuanyuanMa03/ai-to-llm-engineer/blob/main/' + vm.route.file;
-            return html + '<hr><p style="font-size:13px;color:#8a8068">📝 发现错误? <a href="' + url + '" target="_blank">在 GitHub 上编辑本页</a></p>';
-          });
-        }
-      ]
+      themeColor: '#12305a',
+      plugins: [window.aiJournalPlugin]
     };
   </script>
 
-  <!-- Docsify 核心 (锁版本,避免主版本漂移导致渲染失效) -->
   <script src="//cdn.jsdelivr.net/npm/docsify@4.13.1"></script>
-  <!-- 插件:搜索 -->
   <script src="//cdn.jsdelivr.net/npm/docsify@4.13.1/plugins/search.min.js"></script>
-  <!-- 插件:代码高亮 -->
   <script src="//cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
-  <!-- 插件:数学公式 KaTeX (docsify-katex 1.x 最新,与 katex@0.16.9 兼容) -->
   <script src="//cdn.jsdelivr.net/npm/docsify-katex@1.4.5/dist/docsify-katex.js"></script>
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-  <!-- 插件:页脚 -->
   <script src="//cdn.jsdelivr.net/npm/docsify@4.13.1/plugins/emoji.min.js"></script>
 </body>
 </html>
