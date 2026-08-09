@@ -1,6 +1,6 @@
 # 03 · Transformer 结构详解
 
-> 一句话:**学完这节,你能回答「手写一个 Scaled Dot-Product Attention,并解释为什么除以 $\sqrt{d_k}$、为什么要多头、Causal Mask 屏蔽什么」这个面试题。**
+> **这一关结束，你能手写 Attention，并讲清为什么要除以 $\sqrt{d_k}$。**
 
 ## 🤔 课前小测
 先别急着学,花 30 秒回答下面 3 题(答案在文末):

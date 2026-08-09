@@ -6,58 +6,69 @@
 <title>LLM 面试自测器 · AI 手帐</title>
 <style>
   :root{
-    --paper:#fbf8f0; --ink:#23201a; --blue:#2a55b3; --red:#c63a2f;
-    --green:#2e8b57; --border:#d9d4c4; --muted:#8a8068;
+    --paper:#f7f2e7; --paper-bright:#fffdf8; --ink:#10294d; --blue:#1e5ba8;
+    --red:#ef4a43; --green:#16847d; --yellow:#fff1a9; --border:rgba(16,41,77,.2);
+    --muted:#777568; --grid:rgba(35,83,120,.075); --shadow:0 18px 42px rgba(61,50,30,.14);
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:var(--paper);
-    background-image:radial-gradient(circle at 50% 0%,#efe9d7,#e3dcc6 60%,#d8d0b8);
-    min-height:100vh;color:var(--ink);padding:20px}
-  .container{max-width:720px;margin:0 auto}
-  header{text-align:center;margin-bottom:24px}
-  header h1{font-size:26px;margin-bottom:6px}
-  header p{color:var(--muted);font-size:14px}
-  .stats{display:flex;gap:12px;justify-content:center;margin:16px 0;font-size:14px;color:var(--muted)}
-  .stats span{background:#fff;padding:4px 12px;border-radius:6px;border:1px solid var(--border)}
-  .card{background:#fff;border:2px solid var(--border);border-radius:12px;padding:28px;
-    box-shadow:0 8px 24px -8px rgba(0,0,0,.15);margin-bottom:16px;min-height:200px}
-  .q-meta{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
-  .tag{font-size:12px;padding:3px 10px;border-radius:4px;font-weight:600}
-  .tag.stage{background:#e8efff;color:var(--blue)}
-  .tag.diff-easy{background:#e8f5e9;color:var(--green)}
-  .tag.diff-mid{background:#fff3e0;color:#e65100}
-  .tag.diff-hard{background:#fce4ec;color:var(--red)}
-  .tag.freq{background:#f3e5f5;color:#7b1fa2}
-  .question{font-size:19px;line-height:1.6;margin-bottom:20px;font-weight:500}
-  .answer{display:none;background:var(--paper);border-left:4px solid var(--green);
-    padding:14px 16px;border-radius:0 6px 6px 0;margin-bottom:16px;white-space:pre-wrap;
-    font-size:15px;line-height:1.6}
-  .answer.show{display:block}
-  .answer-label{font-weight:700;color:var(--green);margin-bottom:6px}
-  .controls{display:flex;gap:10px;flex-wrap:wrap}
-  button{font-family:inherit;font-size:15px;padding:10px 20px;border-radius:8px;cursor:pointer;
-    border:none;transition:.15s;font-weight:600}
-  .btn-reveal{background:var(--green);color:#fff;flex:1}
-  .btn-reveal:hover{filter:brightness(.92)}
-  .btn-next{background:var(--blue);color:#fff;flex:1}
-  .btn-next:hover{filter:brightness(.92)}
-  .btn-reset{background:#eee;color:var(--muted)}
-  .filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
-  .filter-bar label{font-size:14px;color:var(--muted)}
-  select{font-family:inherit;font-size:14px;padding:5px 10px;border-radius:6px;
-    border:1px solid var(--border);background:#fff;color:var(--ink)}
-  .empty{text-align:center;color:var(--muted);padding:60px 20px}
-  footer{text-align:center;margin-top:24px;font-size:13px;color:var(--muted)}
-  footer a{color:var(--blue);text-decoration:none}
-  .progress{height:6px;background:#e0dac8;border-radius:3px;margin:12px 0;overflow:hidden}
-  .progress-bar{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));transition:.3s;width:0}
+  body{min-height:100vh;color:var(--ink);font-family:'PingFang SC','Microsoft YaHei',system-ui,sans-serif;
+    background-color:#ded5c5;background-image:radial-gradient(circle at 12% 5%,rgba(255,255,255,.8),transparent 31%),linear-gradient(115deg,rgba(90,70,38,.035),transparent 45%)}
+  button,select{font:inherit}
+  button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid rgba(239,74,67,.35);outline-offset:3px}
+  .quiz-topbar{position:fixed;z-index:20;inset:0 0 auto 0;height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;
+    background:rgba(255,253,248,.96);border-bottom:1px solid var(--border);box-shadow:0 4px 18px rgba(39,35,28,.08);backdrop-filter:blur(12px)}
+  .quiz-topbar a{color:var(--ink);font-weight:900;text-decoration:none}.quiz-topbar span{font-size:12px;font-weight:800;color:var(--muted)}
+  .container{width:min(880px,calc(100% - 28px));margin:0 auto;padding:78px 0 40px}
+  .quiz-book{position:relative;padding:38px 58px 42px;background-color:var(--paper-bright);
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;
+    border:1px solid var(--border);border-radius:5px 13px 10px 5px;box-shadow:var(--shadow)}
+  .quiz-book:before{position:absolute;top:32px;bottom:32px;left:32px;width:2px;background:rgba(239,74,67,.24);content:''}
+  header{position:relative;margin:0 0 18px;padding:0 0 16px 24px;border-bottom:1px solid var(--border);text-align:left}
+  header:after{position:absolute;right:22px;bottom:12px;color:var(--red);font-family:'STKaiti','KaiTi',serif;font-size:14px;content:'先说，再翻。大脑不接受剧透。';transform:rotate(-2deg)}
+  header h1{display:inline;font-size:clamp(31px,5vw,47px);font-weight:950;letter-spacing:-.055em;line-height:1.2;
+    background:linear-gradient(transparent calc(100% - 4px),var(--red) 4px) no-repeat}
+  header p{max-width:560px;margin-top:12px;color:var(--muted);font-size:14px;line-height:1.7}
+  .stats{display:flex;gap:10px;justify-content:flex-start;margin:14px 0 10px 24px;color:var(--muted);font-size:12px}
+  .stats span{padding:5px 9px;background:rgba(255,253,248,.7);border:1px solid var(--border);border-radius:3px}
+  .filter-bar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:0 0 12px 24px;padding:11px 15px;background:rgba(240,235,223,.66);border:1px dashed var(--border)}
+  .filter-bar label{color:var(--muted);font-size:12px;font-weight:800}
+  select{padding:7px 10px;color:var(--ink);background:var(--paper-bright);border:1px solid var(--border);border-radius:4px;font-size:12px}
+  .progress{height:8px;margin:0 0 16px 24px;overflow:hidden;background:#dedbd2;border-radius:10px}
+  .progress-bar{width:0;height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:inherit;transition:.3s}
+  .card{position:relative;min-height:210px;margin:0 0 18px 24px;padding:28px 34px;background:rgba(255,253,248,.88);border:2px solid var(--ink);border-radius:4px;
+    box-shadow:5px 6px 0 var(--yellow)}
+  .card:before{position:absolute;top:-12px;right:35px;width:76px;height:22px;background:rgba(221,181,96,.58);content:'';transform:rotate(3deg)}
+  .q-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .tag{padding:3px 8px;border-radius:3px;font-size:11px;font-weight:800}.tag.stage{color:var(--blue);background:#e7eff9}
+  .tag.diff-easy{color:var(--green);background:#e8f4ee}.tag.diff-mid{color:#a95710;background:#fff0cc}.tag.diff-hard{color:#b33035;background:#f8dfe2}.tag.freq{color:#634789;background:#eee6f8}
+  .question{margin-bottom:25px;color:var(--ink);font-size:clamp(19px,3vw,25px);font-weight:850;line-height:1.6}
+  .answer{display:none;margin-bottom:20px;padding:20px 22px;white-space:pre-wrap;color:#334557;background:#edf6f1;border:1px dashed var(--green);border-radius:3px;font-size:14px;line-height:1.75}
+  .answer.show{display:block;animation:answer-in .25s ease both}.answer-label{margin-bottom:7px;color:var(--green);font-weight:900}
+  @keyframes answer-in{from{opacity:0;transform:translateY(-7px)}to{opacity:1;transform:none}}
+  .controls{display:flex;gap:10px;flex-wrap:wrap;margin-left:24px}
+  button{min-height:44px;padding:10px 18px;border:0;border-radius:4px;cursor:pointer;font-size:14px;font-weight:900;transition:.15s}
+  button:hover{transform:translateY(-1px)}.btn-reveal{flex:1;color:#fff;background:var(--ink);box-shadow:4px 5px 0 var(--red)}
+  .btn-next{flex:1;color:#fff;background:var(--blue);box-shadow:4px 5px 0 var(--ink)}.btn-reset{color:var(--muted);background:#e7e3da}
+  .confidence{display:none;grid-template-columns:repeat(3,1fr);gap:9px;margin:0 0 13px 24px}.confidence.show{display:grid}
+  .confidence button{min-height:48px;color:var(--ink);background:var(--paper-bright);border:1px solid var(--border)}
+  .confidence button:hover{border-color:var(--ink);box-shadow:3px 3px 0 var(--yellow)}
+  .empty{padding:66px 20px;color:var(--muted);font-family:'STKaiti','KaiTi',serif;font-size:18px;line-height:1.8;text-align:center}
+  footer{margin-top:25px;color:var(--muted);font-size:12px;line-height:1.7;text-align:center}footer a{color:var(--blue);text-underline-offset:3px}
+  @media(max-width:620px){.quiz-topbar{height:56px;padding:0 14px}.quiz-topbar span{display:none}.container{padding-top:72px}.quiz-book{padding:28px 18px}
+    .quiz-book:before{left:19px}header,.stats,.filter-bar,.progress,.card,.controls,.confidence{margin-left:14px}header:after{display:none}.card{padding:27px 21px}
+    .stats{overflow:auto}.confidence{grid-template-columns:1fr}.controls{display:grid;grid-template-columns:1fr auto}.btn-reveal,.btn-next{grid-column:1/-1}}
 </style>
 </head>
 <body>
+<div class="quiz-topbar">
+  <a href="../">← AI 手帐 · 返回学习地图</a>
+  <span id="quizPlayer">Lv.1 张量见习生 · 0 / 1600 XP</span>
+</div>
 <div class="container">
+  <main class="quiz-book">
   <header>
-    <h1>🎯 LLM 面试自测器</h1>
-    <p>从大模型算法岗高频面试题中随机抽题 · 先想答案再翻看</p>
+    <h1>面试试炼场</h1>
+    <p>从大模型算法岗高频题里随机抽卡。先完整说一遍，再翻答案——“我心里会”暂不计分。</p>
   </header>
 
   <div class="filter-bar">
@@ -90,15 +101,22 @@
     <div class="empty">点击「开始答题」加载题库</div>
   </div>
 
-  <div class="controls">
-    <button class="btn-reveal" id="revealBtn" onclick="revealAnswer()">👁 看答案</button>
-    <button class="btn-next" id="nextBtn" onclick="nextQuestion()" style="display:none">下一题 →</button>
-    <button class="btn-reset" onclick="resetProgress()">↻ 重置</button>
+  <div class="confidence" id="confidenceBar" aria-label="自评掌握程度">
+    <button type="button" onclick="rateAnswer('again')">🫠 完全不会</button>
+    <button type="button" onclick="rateAnswer('fuzzy')">🤔 有点模糊</button>
+    <button type="button" onclick="rateAnswer('known')">😎 我能讲清</button>
   </div>
 
+  <div class="controls">
+    <button class="btn-reveal" id="revealBtn" onclick="revealAnswer()">翻开答案</button>
+    <button class="btn-next" id="nextBtn" onclick="nextQuestion()" style="display:none">下一张题卡 →</button>
+    <button class="btn-reset" onclick="resetProgress()">↻ 重置</button>
+  </div>
+  </main>
+
   <footer>
-    <p>题目来自 <a href="https://github.com/YuanyuanMa03/ai-to-llm-engineer" target="_blank">AI 手帐 · 大模型算法工程师求职路线图</a></p>
-    <p style="margin-top:4px">在 <a href="https://github.com/YuanyuanMa03/ai-to-llm-engineer/discussions" target="_blank">Discussions</a> 投稿你遇到的面试题</p>
+    <p>题目来自 <a href="https://github.com/YuanyuanMa03/ai-to-llm-engineer" target="_blank" rel="noopener">AI 手帐 · 大模型工程师冒险地图</a></p>
+    <p>答错不可耻，背完答案还不会解释才比较尴尬。</p>
   </footer>
 </div>
 
@@ -151,6 +169,15 @@ const QUESTIONS = [
 let pool = [];           // 当前可选题目池
 let current = null;      // 当前题目
 let answered = new Set(); // 已答题目索引
+let ratings = loadRatings();
+
+function loadRatings(){
+  try{return JSON.parse(localStorage.getItem('ai-journal-quiz-ratings-v2')||'{}')}catch(e){return {}}
+}
+
+function saveRatings(){
+  try{localStorage.setItem('ai-journal-quiz-ratings-v2',JSON.stringify(ratings))}catch(e){}
+}
 
 // ============ 逻辑 ============
 function buildPool(){
@@ -170,10 +197,12 @@ function nextQuestion(){
   // 过滤掉已答的
   const remaining = pool.filter(i=>!answered.has(i));
   if(remaining.length===0){
+    const needsReview = [...answered].filter(i=>ratings[i]==='again'||ratings[i]==='fuzzy').length;
     document.getElementById('card').innerHTML =
-      `<div class="empty">🎉 本轮已全部答完!<br><br>共 ${answered.size} 题。点击「重置」开始新一轮。</div>`;
+      `<div class="empty">本轮题卡清空啦，盖章！<br>共答 ${answered.size} 题，其中 ${needsReview} 题建议回炉。<br><small>放心，回炉不是退学，只是模型在继续训练。</small></div>`;
     document.getElementById('revealBtn').style.display='none';
     document.getElementById('nextBtn').style.display='none';
+    document.getElementById('confidenceBar').classList.remove('show');
     updateStats();
     return;
   }
@@ -200,13 +229,23 @@ function renderQuestion(){
     </div>`;
   document.getElementById('revealBtn').style.display='block';
   document.getElementById('nextBtn').style.display='none';
+  document.getElementById('confidenceBar').classList.remove('show');
 }
 
 function revealAnswer(){
   document.getElementById('answerBox').classList.add('show');
   document.getElementById('revealBtn').style.display='none';
-  document.getElementById('nextBtn').style.display='block';
+  document.getElementById('nextBtn').style.display='none';
+  document.getElementById('confidenceBar').classList.add('show');
+}
+
+function rateAnswer(rating){
+  if(!current)return;
+  ratings[current.index]=rating;
+  saveRatings();
   answered.add(current.index);
+  document.getElementById('confidenceBar').classList.remove('show');
+  document.getElementById('nextBtn').style.display='block';
   updateStats();
 }
 
@@ -221,7 +260,10 @@ function updateStats(){
   document.getElementById('totalCount').textContent = `题库 ${total} 题`;
   document.getElementById('seenCount').textContent = `已答 ${seen}`;
   document.getElementById('remainCount').textContent = `本轮剩余 ${remain}`;
-  const pct = total>0 ? (seen%total)/total*100 : 0;
+  const answeredInPool = [...answered].filter(i=>{
+    const q=QUESTIONS[i]; return (sf==='all'||q.stage==sf)&&(df==='all'||q.diff==df);
+  }).length;
+  const pct = total>0 ? answeredInPool/total*100 : 0;
   document.getElementById('progressBar').style.width = pct + '%';
 }
 
@@ -237,9 +279,22 @@ document.getElementById('stageFilter').addEventListener('change',()=>{buildPool(
 document.getElementById('diffFilter').addEventListener('change',()=>{buildPool();nextQuestion();updateStats();});
 
 // 初始化
+function updatePlayer(){
+  let completed=[];
+  try{completed=JSON.parse(localStorage.getItem('ai-journal-completed-v2')||'[]')}catch(e){}
+  const count=completed.length;
+  let level=1,title='张量见习生';
+  if(count>=4){level=2;title='注意力驯服者'}
+  if(count>=8){level=3;title='对齐炼金师'}
+  if(count>=12){level=4;title='Agent 工程师'}
+  if(count>=16){level=5;title='全栈大模型勇者'}
+  document.getElementById('quizPlayer').textContent=`Lv.${level} ${title} · ${count*100} / 1600 XP`;
+}
+
 buildPool();
 nextQuestion();
 updateStats();
+updatePlayer();
 </script>
 </body>
 </html>
