@@ -30,6 +30,14 @@
   - [RAG 检索增强](05-deployment/02-rag.md)
   - [Agent 与工具调用](05-deployment/03-agent.md)
 
+- **第 6 阶段 · 前沿专题**
+  - [阶段导览](06-frontier/README.md)
+  - [MCP:标准化工具接入协议](06-frontier/01-mcp.md)
+
 ---
+
+- **🎯 [面试自测器](../quiz/)** <sub>↗ 新窗口</sub>
+- **✋ [手撕代码题合集](hand-coding.md)**
+- **💬 [社区讨论](https://github.com/YuanyuanMa03/ai-to-llm-engineer/discussions)** <sub>↗ 投稿面试题</sub>
 
 - **[关于本教程](about.md)**

@@ -26,6 +26,17 @@
 | **03** | [预训练](03-pretraining/README.md) | 理解 LLM 怎么炼出来的 | 2-3 周 |
 | **04** | [微调与对齐](04-finetuning/README.md) | 能用 LoRA 微调一个模型 | 3-4 周 |
 | **05** | [应用与部署](05-deployment/README.md) | 能搭 RAG / 调 vLLM | 2-3 周 |
+| **06** | [前沿专题](06-frontier/README.md) | 跟上 MCP 等 2026 新趋势 | 持续 |
+
+## 🧰 求职工具箱
+
+不只是看教程,还能直接练:
+
+| 工具 | 说明 |
+|------|------|
+| 🎯 **[面试自测器](../quiz/)** | 30 道真题随机抽,按阶段/难度筛选,先想答案再翻看 |
+| ✋ **[手撕代码题合集](hand-coding.md)** | Attention / Softmax / LoRA 等 10 道高频手写题,含参考实现 |
+| 💬 **[社区讨论区](https://github.com/YuanyuanMa03/ai-to-llm-engineer/discussions)** | 投稿你遇到的面试题,讨论疑难 |
 
 ## 🎯 为什么又是另一个教程?
 

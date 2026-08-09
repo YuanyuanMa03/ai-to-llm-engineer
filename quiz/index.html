@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LLM 面试自测器 · AI 手帐</title>
+<style>
+  :root{
+    --paper:#fbf8f0; --ink:#23201a; --blue:#2a55b3; --red:#c63a2f;
+    --green:#2e8b57; --border:#d9d4c4; --muted:#8a8068;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:var(--paper);
+    background-image:radial-gradient(circle at 50% 0%,#efe9d7,#e3dcc6 60%,#d8d0b8);
+    min-height:100vh;color:var(--ink);padding:20px}
+  .container{max-width:720px;margin:0 auto}
+  header{text-align:center;margin-bottom:24px}
+  header h1{font-size:26px;margin-bottom:6px}
+  header p{color:var(--muted);font-size:14px}
+  .stats{display:flex;gap:12px;justify-content:center;margin:16px 0;font-size:14px;color:var(--muted)}
+  .stats span{background:#fff;padding:4px 12px;border-radius:6px;border:1px solid var(--border)}
+  .card{background:#fff;border:2px solid var(--border);border-radius:12px;padding:28px;
+    box-shadow:0 8px 24px -8px rgba(0,0,0,.15);margin-bottom:16px;min-height:200px}
+  .q-meta{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+  .tag{font-size:12px;padding:3px 10px;border-radius:4px;font-weight:600}
+  .tag.stage{background:#e8efff;color:var(--blue)}
+  .tag.diff-easy{background:#e8f5e9;color:var(--green)}
+  .tag.diff-mid{background:#fff3e0;color:#e65100}
+  .tag.diff-hard{background:#fce4ec;color:var(--red)}
+  .tag.freq{background:#f3e5f5;color:#7b1fa2}
+  .question{font-size:19px;line-height:1.6;margin-bottom:20px;font-weight:500}
+  .answer{display:none;background:var(--paper);border-left:4px solid var(--green);
+    padding:14px 16px;border-radius:0 6px 6px 0;margin-bottom:16px;white-space:pre-wrap;
+    font-size:15px;line-height:1.6}
+  .answer.show{display:block}
+  .answer-label{font-weight:700;color:var(--green);margin-bottom:6px}
+  .controls{display:flex;gap:10px;flex-wrap:wrap}
+  button{font-family:inherit;font-size:15px;padding:10px 20px;border-radius:8px;cursor:pointer;
+    border:none;transition:.15s;font-weight:600}
+  .btn-reveal{background:var(--green);color:#fff;flex:1}
+  .btn-reveal:hover{filter:brightness(.92)}
+  .btn-next{background:var(--blue);color:#fff;flex:1}
+  .btn-next:hover{filter:brightness(.92)}
+  .btn-reset{background:#eee;color:var(--muted)}
+  .filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+  .filter-bar label{font-size:14px;color:var(--muted)}
+  select{font-family:inherit;font-size:14px;padding:5px 10px;border-radius:6px;
+    border:1px solid var(--border);background:#fff;color:var(--ink)}
+  .empty{text-align:center;color:var(--muted);padding:60px 20px}
+  footer{text-align:center;margin-top:24px;font-size:13px;color:var(--muted)}
+  footer a{color:var(--blue);text-decoration:none}
+  .progress{height:6px;background:#e0dac8;border-radius:3px;margin:12px 0;overflow:hidden}
+  .progress-bar{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));transition:.3s;width:0}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>🎯 LLM 面试自测器</h1>
+    <p>从大模型算法岗高频面试题中随机抽题 · 先想答案再翻看</p>
+  </header>
+
+  <div class="filter-bar">
+    <label>阶段:</label>
+    <select id="stageFilter">
+      <option value="all">全部</option>
+      <option value="1">1·数学基础</option>
+      <option value="2">2·深度学习</option>
+      <option value="3">3·预训练</option>
+      <option value="4">4·微调对齐</option>
+      <option value="5">5·应用部署</option>
+    </select>
+    <label style="margin-left:12px">难度:</label>
+    <select id="diffFilter">
+      <option value="all">全部</option>
+      <option value="easy">⭐ 基础</option>
+      <option value="mid">⭐⭐ 进阶</option>
+      <option value="hard">⭐⭐⭐ 高难</option>
+    </select>
+  </div>
+
+  <div class="stats">
+    <span id="totalCount">题库加载中</span>
+    <span id="seenCount">已答 0</span>
+    <span id="remainCount">剩余 -</span>
+  </div>
+  <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+
+  <div class="card" id="card">
+    <div class="empty">点击「开始答题」加载题库</div>
+  </div>
+
+  <div class="controls">
+    <button class="btn-reveal" id="revealBtn" onclick="revealAnswer()">👁 看答案</button>
+    <button class="btn-next" id="nextBtn" onclick="nextQuestion()" style="display:none">下一题 →</button>
+    <button class="btn-reset" onclick="resetProgress()">↻ 重置</button>
+  </div>
+
+  <footer>
+    <p>题目来自 <a href="https://github.com/YuanyuanMa03/ai-to-llm-engineer" target="_blank">AI 手帐 · 大模型算法工程师求职路线图</a></p>
+    <p style="margin-top:4px">在 <a href="https://github.com/YuanyuanMa03/ai-to-llm-engineer/discussions" target="_blank">Discussions</a> 投稿你遇到的面试题</p>
+  </footer>
+</div>
+
+<script>
+// ============ 题库 ============
+const QUESTIONS = [
+  // 第1阶段 数学
+  {stage:1,diff:'easy',freq:'high',q:'梯度下降为什么要减去梯度(而不是加)?',a:'梯度 ∇L 指向损失上升最快的方向。要让损失下降,必须沿反方向走,所以 θ ← θ - η·∇L。如果加梯度,损失会上升(走向最大值)。'},
+  {stage:1,diff:'mid',freq:'high',q:'学习率设太大或太小分别会怎样?',a:'太大→发散震荡(步子迈太大跳过谷底);太小→收敛极慢(步子太小要很久)。实际要调,常用 1e-3 到 1e-5,配合 warmup。'},
+  {stage:1,diff:'easy',freq:'mid',q:'矩阵乘法 (2×3)·(3×2) 结果是什么形状?',a:'2×2。关键:中间维度(3)必须匹配。结果形状取 (m×n)·(n×p) = (m×p)。'},
+  {stage:1,diff:'mid',freq:'mid',q:'链式法则是什么?写出 f(x)=sin(x²) 的导数。',a:'链式法则:复合函数导数 = 各级导数相乘。f(g(x))\' = f\'(g(x))·g\'(x)。\n对 sin(x²):外层 sin 的导数 cos,内层 x² 的导数 2x。所以 f\'(x) = cos(x²)·2x。'},
+  {stage:1,diff:'mid',freq:'high',q:'偏差-方差权衡是什么?过拟合属于哪一类?',a:'偏差:模型太简单导致的误差(欠拟合)。方差:模型太复杂、对训练数据敏感导致的误差(过拟合)。过拟合 = 高方差(训练好测试差)。噪声是误差下限。'},
+  {stage:1,diff:'easy',freq:'high',q:'为什么测试集只能看一次?',a:'一旦用测试集结果调整了模型/超参,测试集就被"污染"了(变成验证集)。测试集代表真实未知数据,只在最终评估时用一次。'},
+
+  // 第2阶段 深度学习
+  {stage:2,diff:'mid',freq:'high',q:'反向传播为什么比数值微分高效?',a:'数值微分对每个参数都要做一次前向(O(n)次),反向传播只需一次前向+一次反向(共2次遍历整个计算图),就能算出所有参数的梯度。'},
+  {stage:2,diff:'hard',freq:'high',q:'手写 Scaled Dot-Product Attention 的核心一行是什么?为什么除以 √dₖ?',a:'核心: attn = softmax(Q @ K.T / sqrt(d_k)) @ V\n除以 √dₖ:当 dₖ 大时,QKᵀ 点积值很大,softmax 会进入饱和区(梯度趋零)。除以 √dₖ 把方差缩放回 1,保持梯度健康。'},
+  {stage:2,diff:'mid',freq:'high',q:'Multi-Head Attention 为什么要"多头"?',a:'不同的头可以在不同子空间学习不同的注意力模式(有的关注语法、有的关注语义)。类比 CNN 的多通道。单头只能学一种模式,多头让模型并行捕获多种关系。'},
+  {stage:2,diff:'mid',freq:'mid',q:'为什么 Transformer 能取代 RNN?',a:'两点:1.并行性——RNN 必须逐步计算无法并行,Transformer 的 Self-Attention 所有位置同时算,训练快得多;2.长程依赖——RNN 梯度随时间步消失,Attention 让任意两位置直接交互。'},
+  {stage:2,diff:'easy',freq:'mid',q:'Causal Mask(因果掩码)屏蔽的是什么?Encoder 需要吗?',a:'屏蔽"未来"的 token(上三角置为 -∞)。这样生成第 t 个词时只能看到前 t-1 个词。Decoder 必须加(自回归生成),Encoder 不加(如 BERT 需要双向上下文)。'},
+  {stage:2,diff:'mid',freq:'mid',q:'梯度消失和梯度爆炸分别是什么原因?怎么解决?',a:'消失:深层网络反向传播时梯度连乘<1趋零(RNN尤甚)。解决:残差连接、LSTM/GRU、ReLU。爆炸:梯度连乘>1发散。解决:梯度裁剪、合理初始化、LayerNorm。'},
+  {stage:2,diff:'hard',freq:'mid',q:'为什么神经网络权重不能初始化为全 0?',a:'全0初始化会导致所有神经元计算相同的前向和反向(对称性),所有神经元学到相同的东西,等价于只有一个神经元。需要随机初始化打破对称性(如 Xavier/He)。'},
+
+  // 第3阶段 预训练
+  {stage:3,diff:'mid',freq:'high',q:'BPE 分词的基本原理是什么?',a:'从字符级别开始,反复找出语料中出现频率最高的相邻 token 对,把它们合并成一个新 token,直到词表达到目标大小。高频词会被完整保留,低频词拆成子词。'},
+  {stage:3,diff:'mid',freq:'high',q:'为什么现在的大模型都用 Decoder-only 架构(而不是 Encoder-Decoder)?',a:'两点:1.训练效率——Decoder-only 的 next-token prediction 天然适合海量无标注文本,数据无限;2.Scaling 友好——研究表明 Decoder-only 在扩大参数/数据时性能提升最稳定(Scaling Laws 验证)。'},
+  {stage:3,diff:'hard',freq:'high',q:'RoPE(旋转位置编码)相比 sin/cos 位置编码好在哪?',a:'RoPE 通过旋转矩阵编码相对位置,有更好的长度外推性(训练时短序列,推理时可处理更长序列);而绝对位置编码(sin/cos)外推差。RoPE 还支持 NTK-aware 等扩展,是目前主流(LLaMA/Qwen 都用)。'},
+  {stage:3,diff:'mid',freq:'high',q:'Chinchilla Scaling Law 给出的最优 token:参数比是多少?',a:'约 20:1。即每个参数配约 20 个 token 最优。例如 70B 模型应配约 1.4T tokens。Kaplan 原始论文低估了数据重要性(给的比更低),Chinchilla 纠正了这点。'},
+  {stage:3,diff:'mid',freq:'mid',q:'MoE(混合专家)为什么能省算力?',a:'MoE 每次前向只激活 Top-K 个专家(如 8 选 2),而不是全部。总参数量很大(容量大),但每次推理/训练的激活参数少(算力省)。代价:显存仍要装下所有专家,且路由负载均衡难调。'},
+  {stage:3,diff:'easy',freq:'mid',q:'RMSNorm 和 LayerNorm 的区别是什么?',a:'LayerNorm:减均值再除标准差(去 centering + scaling)。RMSNorm:只除 RMS(均方根),不减均值。RMSNorm 计算更快,实验证明效果接近,LLaMA 等现代模型采用。'},
+
+  // 第4阶段 微调对齐
+  {stage:4,diff:'hard',freq:'high',q:'LoRA 的核心原理是什么?为什么能省显存?',a:'冻结原权重 W,只学一个低秩增量 ΔW = B·A(B∈d×r, A∈r×k, r≪d)。可训练参数从 d×k 降到 (d+k)×r。例如 d=k=4096,r=8:原 1600万 → LoRA 6.5万(0.4%)。显存只存 LoRA 参数的梯度和优化器状态。'},
+  {stage:4,diff:'mid',freq:'high',q:'LoRA 的秩 r 怎么选?B 为什么初始化为 0?',a:'r 常用 4-64,任务越复杂/数据越多 r 越大。B=0 保证训练开始时 ΔW=BA=0,不改变原模型行为(平滑启动);A 用高斯随机初始化,保证反向传播有梯度流。'},
+  {stage:4,diff:'mid',freq:'high',q:'QLoRA 比 LoRA 多做了什么?',a:'QLoRA = 4-bit NF4 量化基础模型 + LoRA 微调。把冻结的基础模型量化到 4-bit(显存大幅下降,7B 模型单卡 24G 可微调),LoRA 参数保持 FP16 训练。还用了双重量化和分页优化器进一步省显存。'},
+  {stage:4,diff:'hard',freq:'high',q:'RLHF 和 DPO 的核心区别是什么?',a:'RLHF 三阶段(SFT→训练奖励模型RM→PPO优化),需要训练一个独立的 RM,且 PPO 是强化学习,不稳定难调。DPO 的洞察:可以跳过 RM,直接用偏好对(chosen/rejected)推导出损失函数,把 RL 问题转化为监督学习,简单稳定。'},
+  {stage:4,diff:'mid',freq:'mid',q:'什么是灾难性遗忘?SFT 时怎么缓解?',a:'微调后模型忘了预训练知识(如 SFT 后通用能力下降)。缓解:用很小的学习率(比预训练小1-2个数量级)、SFT 数据里混入部分预训练数据、用 LoRA 等参数高效方法(少改动原权重)。'},
+  {stage:4,diff:'mid',freq:'mid',q:'SFT 的损失只在回答部分算,还是 prompt 和回答都算?',a:'只在回答(response)部分算。prompt 部分要 mask 掉(不参与 loss)。因为目标是教模型"如何回答",而不是"复述问题"。面试常考这个 mask 逻辑。'},
+
+  // 第5阶段 应用部署
+  {stage:5,diff:'mid',freq:'high',q:'KV Cache 缓存的是什么?为什么能加速?',a:'缓存历史 token 的 Key 和 Value。自回归生成时,新 token 只需算自己的 Q 去和缓存的 K/V 做注意力,不用重新计算所有历史 token 的 K/V。把每步从 O(n²) 降到 O(n)。'},
+  {stage:5,diff:'hard',freq:'high',q:'算一算:Llama-2-13B(batch=1, seq=2048) 的 KV Cache 占多少显存?',a:'公式:2 × L × n_kv × d × seq × batch × dtype。\n13B: L=40层, n_kv=40头, d=128, seq=2048, FP16(2字节)。\n= 2×40×40×128×2048×1×2 = 1.68×10⁹ 字节 ≈ 1.56 GB。\n如果 batch=32 则约 50 GB(比模型本身还大!)。GQA(n_kv=8)可降到 0.31 GB。'},
+  {stage:5,diff:'mid',freq:'high',q:'RAG 的完整流程是什么?为什么要加 rerank?',a:'流程:文档切 chunk → embedding 编码 → 存向量库 → 查询时检索 top-k → 拼进 prompt 让 LLM 回答。\nRerank:embedding 检索快但粗,用一个更重的模型(如 cross-encoder)对 top-k 精排,显著提升准确率。'},
+  {stage:5,diff:'easy',freq:'high',q:'微调 vs RAG,什么场景用哪个?',a:'微调:改模型内在能力/风格/领域知识,数据要够,成本高,更新慢。RAG:接外部/实时/私有知识,无需改模型,更新快,成本低。通常 RAG 优先(更灵活),微调用于 RAG 解决不了的能力提升。'},
+  {stage:5,diff:'mid',freq:'mid',q:'ReAct 框架的循环是什么?',a:'Thought(推理当前该做什么)→ Action(调用工具)→ Observation(观察工具返回)→ 循环,直到得出最终答案。让模型边推理边行动,适合需要多步工具调用的复杂任务。'},
+  {stage:5,diff:'mid',freq:'mid',q:'量化(INT4)为什么不会掉太多精度?',a:'大模型权重分布通常集中在 0 附近(近似高斯),4-bit 量化在 0 附近分配更多量化等级(NF4/AWQ 等方法),损失集中在尾部少数异常值。且推理时激活值仍是高精度,只有权重量化。一般掉 1-2 个点可接受。'},
+];
+
+// ============ 状态 ============
+let pool = [];           // 当前可选题目池
+let current = null;      // 当前题目
+let answered = new Set(); // 已答题目索引
+
+// ============ 逻辑 ============
+function buildPool(){
+  const sf = document.getElementById('stageFilter').value;
+  const df = document.getElementById('diffFilter').value;
+  pool = QUESTIONS.map((q,i)=>({q,i})).filter(({q})=>
+    (sf==='all'||q.stage==sf) && (df==='all'||q.diff==df)
+  ).map(x=>x.i);
+  // 打乱
+  for(let i=pool.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [pool[i],pool[j]]=[pool[j],pool[i]];
+  }
+}
+
+function nextQuestion(){
+  // 过滤掉已答的
+  const remaining = pool.filter(i=>!answered.has(i));
+  if(remaining.length===0){
+    document.getElementById('card').innerHTML =
+      `<div class="empty">🎉 本轮已全部答完!<br><br>共 ${answered.size} 题。点击「重置」开始新一轮。</div>`;
+    document.getElementById('revealBtn').style.display='none';
+    document.getElementById('nextBtn').style.display='none';
+    updateStats();
+    return;
+  }
+  const idx = remaining[Math.floor(Math.random()*remaining.length)];
+  current = {data:QUESTIONS[idx], index:idx};
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const d = current.data;
+  const stageNames = {1:'数学基础',2:'深度学习',3:'预训练',4:'微调对齐',5:'应用部署'};
+  const diffNames = {easy:'⭐ 基础',mid:'⭐⭐ 进阶',hard:'⭐⭐⭐ 高难'};
+  const freqNames = {high:'🔴 高频',mid:'🟡 中频'};
+  document.getElementById('card').innerHTML = `
+    <div class="q-meta">
+      <span class="tag stage">${stageNames[d.stage]}</span>
+      <span class="tag diff-${d.diff}">${diffNames[d.diff]}</span>
+      <span class="tag freq">${freqNames[d.freq]||''}</span>
+    </div>
+    <div class="question">${d.q}</div>
+    <div class="answer" id="answerBox">
+      <div class="answer-label">✅ 参考答案</div>
+      ${d.a}
+    </div>`;
+  document.getElementById('revealBtn').style.display='block';
+  document.getElementById('nextBtn').style.display='none';
+}
+
+function revealAnswer(){
+  document.getElementById('answerBox').classList.add('show');
+  document.getElementById('revealBtn').style.display='none';
+  document.getElementById('nextBtn').style.display='block';
+  answered.add(current.index);
+  updateStats();
+}
+
+function updateStats(){
+  const sf = document.getElementById('stageFilter').value;
+  const df = document.getElementById('diffFilter').value;
+  const total = QUESTIONS.filter(q=>(sf==='all'||q.stage==sf)&&(df==='all'||q.diff==df)).length;
+  const seen = answered.size;
+  const remain = Math.max(0, total - [...answered].filter(i=>{
+    const q=QUESTIONS[i]; return (sf==='all'||q.stage==sf)&&(df==='all'||q.diff==df);
+  }).length);
+  document.getElementById('totalCount').textContent = `题库 ${total} 题`;
+  document.getElementById('seenCount').textContent = `已答 ${seen}`;
+  document.getElementById('remainCount').textContent = `本轮剩余 ${remain}`;
+  const pct = total>0 ? (seen%total)/total*100 : 0;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+function resetProgress(){
+  answered.clear();
+  buildPool();
+  nextQuestion();
+  updateStats();
+}
+
+// 筛选变化时重建
+document.getElementById('stageFilter').addEventListener('change',()=>{buildPool();nextQuestion();updateStats();});
+document.getElementById('diffFilter').addEventListener('change',()=>{buildPool();nextQuestion();updateStats();});
+
+// 初始化
+buildPool();
+nextQuestion();
+updateStats();
+</script>
+</body>
+</html>
