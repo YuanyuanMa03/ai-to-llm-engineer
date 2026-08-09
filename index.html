@@ -1,691 +1,93 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>AI 手帐 · 数学→代码→项目</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Kalam:wght@400;700&family=LXGW+WenKai+TC&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --paper:#fbf8f0; --grid:#d9d4c4; --grid-size:6mm;
-    --ink:#23201a; --blue:#2a55b3; --red:#c63a2f;
-    --hi:#fff066; --hi-green:#bfe8c2; --binding:#b9b09a;
-    --code-bg:#f5f2e8;
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0}
-  body{
-    background:#e8e2d0;
-    background-image:radial-gradient(circle at 50% 0%,#efe9d7 0%,#e3dcc6 60%,#d8d0b8 100%);
-    min-height:100vh;
-    font-family:'LXGW WenKai TC','Caveat','Kalam',cursive,'PingFang SC','Microsoft YaHei',sans-serif;
-    color:var(--ink);padding:0 0 60px;
-  }
-  .bar{position:sticky;top:0;z-index:20;backdrop-filter:blur(8px);
-    background:rgba(251,248,240,.9);border-bottom:1px solid #d8d0b8;
-    padding:9px 14px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;
-    font-family:'Caveat','LXGW WenKai TC',cursive}
-  .bar .brand{font-size:22px;font-weight:700;margin-right:4px}
-  .bar select{font-family:inherit;font-size:15px;background:#fff;border:1px solid #c9bf9f;border-radius:7px;padding:3px 7px;cursor:pointer;color:var(--ink);max-width:44vw}
-  .bar label{font-size:15px;display:inline-flex;align-items:center;gap:4px;cursor:pointer;color:#5a5237}
-  .bar input[type=checkbox]{width:15px;height:15px;accent-color:#2a55b3}
-  .bar .sp{flex:1}
-  .bar .legend{font-family:'Caveat',cursive;font-size:13px;color:#6a6230}
-  .bar .enter-tutorial{display:inline-flex;align-items:center;gap:5px;font-family:'LXGW WenKai TC','Caveat',cursive;font-size:16px;font-weight:700;
-    padding:5px 14px;border-radius:8px;text-decoration:none;cursor:pointer;
-    background:linear-gradient(135deg,#2a55b3,#1f3f8a);color:#fff!important;
-    box-shadow:0 2px 8px -2px rgba(42,85,179,.5);transition:.18s;white-space:nowrap}
-  .bar .enter-tutorial:hover{transform:translateY(-1px);box-shadow:0 4px 12px -2px rgba(42,85,179,.6)}
-  .bar .legend .s-star{color:#d3920f}.bar .legend .s-q{color:var(--red)}.bar .legend .s-e{color:var(--red)}
-  .bar .legend a{color:var(--blue);text-decoration:none}
-
-  .book{max-width:1280px;margin:22px auto 0;padding:0 14px;display:flex;justify-content:center}
-  .spread{position:relative;width:100%;border-radius:6px;box-shadow:0 18px 40px -18px rgba(0,0,0,.35),0 2px 0 #cfcaa8 inset;background:var(--paper)}
-  .view{display:none}
-  .view.active{display:grid;grid-template-columns:1fr 1fr;gap:0;position:relative}
-  .view.active::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:14px;transform:translateX(-50%);
-    background:linear-gradient(90deg,rgba(0,0,0,.10) 0,rgba(0,0,0,0) 30%,rgba(0,0,0,0) 70%,rgba(0,0,0,.10) 100%),
-               repeating-linear-gradient(180deg,var(--binding) 0 6px,transparent 6px 14px);
-    opacity:.55;z-index:3;pointer-events:none}
-  .view.active::after{content:"";position:absolute;top:14px;bottom:14px;left:50%;width:2px;transform:translateX(-50%);
-    background:repeating-linear-gradient(180deg,transparent 0 70px,rgba(120,110,85,.45) 70px 74px);z-index:4;pointer-events:none}
-  .page{position:relative;min-height:780px;padding:32px 40px 54px;background:var(--paper)}
-  .page.left{border-right:1px solid #efe9d6}
-  .page.has-grid{background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:var(--grid-size) var(--grid-size);background-position:-1px -1px}
-  .page::before{content:"";position:absolute;inset:0;pointer-events:none;border-radius:6px;
-    background:radial-gradient(circle at 12% 8%,rgba(200,180,120,.06) 0 16%,transparent 60%),radial-gradient(circle at 88% 92%,rgba(120,90,40,.06) 0 18%,transparent 60%)}
-  .page.right{box-shadow:inset 28px 0 30px -26px rgba(0,0,0,.18)}
-  .page.left{box-shadow:inset -28px 0 30px -26px rgba(0,0,0,.18)}
-  body.no-grid .page.has-grid{background-image:none}
-
-  .ph{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1.5px solid rgba(120,110,85,.5);padding-bottom:5px;margin-bottom:14px;font-family:'Caveat',cursive;color:#5a5237}
-  .ph .date{font-size:20px;font-weight:700}
-  .ph .tag{font-size:14px}
-  h1,h2,h3{font-family:'LXGW WenKai TC','Caveat',cursive;font-weight:700;margin:10px 0 7px;line-height:1.25}
-  h1{font-size:29px}h2{font-size:22px;color:var(--blue);border-left:5px solid var(--blue);padding-left:7px}h3{font-size:18px;color:#3a3528;margin-top:12px}
-  p,li{font-size:17px;line-height:1.58}
-  ul{margin:4px 0 9px;padding-left:19px}li{margin:2px 0}
-
-  .s-star{color:#d3920f;font-weight:700}.s-q{color:var(--red);font-weight:700}.s-e{color:var(--red);font-weight:700}.s-link{color:var(--blue);font-weight:700}
-  .s-exp{color:#2e8b57;font-weight:700}.s-idea{color:#8b5cf6;font-weight:700}
-  .k{color:var(--blue);font-weight:700}.e{color:var(--red);font-weight:700}
-  .hl{background:linear-gradient(transparent 55%,var(--hi) 55%);padding:0 2px}
-  .hl-g{background:linear-gradient(transparent 55%,var(--hi-green) 55%);padding:0 2px}
-  .note{font-family:'Caveat',cursive;color:#6a6a55;font-size:15px}
-  .quote{border-left:3px solid var(--blue);padding:3px 9px;margin:7px 0;background:rgba(228,236,255,.3);font-style:italic;color:#3a3528}
-  .tag-sticky{display:inline-block;background:#ffe9a8;color:#5a4a1a;padding:2px 7px;border-radius:3px;font-family:'Caveat',cursive;font-size:14px;transform:rotate(-2deg);box-shadow:1px 1px 0 rgba(0,0,0,.08)}
-  .box{border:1.5px dashed #b9b09a;border-radius:6px;padding:8px 11px;margin:8px 0;background:rgba(255,255,255,.4)}
-  .box.red{border-color:rgba(198,58,47,.6);background:rgba(255,230,228,.35)}
-  .box.blue{border-color:rgba(42,85,179,.5);background:rgba(228,236,255,.4)}
-  .box.green{border-color:rgba(46,139,87,.5);background:rgba(220,245,230,.4)}
-  .formula{font-family:'Kalam','Caveat',cursive;font-size:20px;background:rgba(255,255,255,.5);border:1px dashed #c9bf9f;border-radius:6px;padding:5px 11px;margin:5px 0;display:inline-block}
-  .ascii{font-family:'Kalam',ui-monospace,monospace;font-size:13px;white-space:pre;line-height:1.3;color:#3a3528}
-  .tpl-h{font-family:'Caveat',cursive;color:#8a6a2a;font-size:14px;margin:9px 0 2px;border-bottom:1px dotted #c9bf9f;padding-bottom:2px}
-  table.tbl{width:100%;border-collapse:collapse;font-size:15px;font-family:'Caveat',cursive;margin:5px 0}
-  table.tbl th,table.tbl td{border-bottom:1px dashed #c9bf9f;padding:3px 5px;text-align:left}
-  table.tbl th{color:#5a5237;font-weight:700}
-
-  /* === 五区学习卡新增样式 === */
-  /* 资源按钮 */
-  .res{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
-  .res a{display:inline-flex;align-items:center;gap:4px;font-family:'Caveat',cursive;font-size:14px;
-    padding:3px 9px;border-radius:5px;text-decoration:none;border:1px solid;transition:.15s}
-  .res a.paper{background:#fff;color:#1f7a8c;border-color:#1f7a8c}
-  .res a.code{background:#fff;color:#333;border-color:#888}
-  .res a.colab{background:#fff;color:#d97706;border-color:#d97706}
-  .res a.video{background:#fff;color:#c00;border-color:#c00}
-  .res a.run{background:#fff;color:#2e8b57;border-color:#2e8b57}
-  .res a:hover{filter:brightness(.95);transform:translateY(-1px)}
-
-  /* 源码折叠区 */
-  details.src{margin:6px 0;border:1px solid #c9bf9f;border-radius:5px;background:var(--code-bg)}
-  details.src summary{cursor:pointer;padding:5px 10px;font-family:'Caveat',cursive;font-size:14px;color:#5a5237;font-weight:700}
-  details.src summary::marker{color:var(--blue)}
-  pre.codeblock{margin:0;padding:10px 12px;font-family:ui-monospace,'SF Mono','Menlo',monospace;font-size:12px;line-height:1.45;color:#2a2a2a;overflow-x:auto;white-space:pre;background:transparent}
-
-  /* JupyterLite 沙盒（按需加载） */
-  .sandbox{margin:8px 0;border:1.5px solid #2e8b57;border-radius:6px;overflow:hidden;background:#fff}
-  .sandbox-bar{display:flex;align-items:center;gap:8px;padding:5px 10px;background:#eaf6ee;font-family:'Caveat',cursive;font-size:14px;cursor:pointer}
-  .sandbox-bar .dot{width:8px;height:8px;border-radius:50%;background:#2e8b57}
-  .sandbox-bar .hint{color:#5a7a5a;font-size:12px;margin-left:auto}
-  .sandbox-body{display:none;padding:0}
-  .sandbox.open .sandbox-body{display:block}
-  .sandbox iframe{width:100%;height:420px;border:0;display:block}
-  .sandbox .loading{padding:14px;font-family:'Caveat',cursive;color:#5a7a5a;font-size:14px}
-
-  /* 内嵌 iframe（Annotated Transformer / YouTube / CartPole） */
-  .embed-wrap{position:relative;margin:8px 0;border:1px solid #c9bf9f;border-radius:5px;overflow:hidden;background:#fff}
-  .embed-wrap .cap{padding:3px 8px;background:#f0ece0;font-family:'Caveat',cursive;font-size:13px;color:#5a5237;border-bottom:1px solid #d8d0b8}
-  .embed-wrap iframe{width:100%;border:0;display:block}
-  .embed-tall iframe{height:520px}
-  .embed-video{aspect-ratio:16/9}
-  .embed-video iframe{height:100%}
-
-  .pgnum{position:absolute;bottom:14px;font-family:'Caveat',cursive;color:#8a8068;font-size:14px}
-  .page.left .pgnum{left:40px}.page.right .pgnum{right:40px}
-
-  @media (max-width:880px){
-    .spread{border-radius:6px}
-    .view.active{grid-template-columns:1fr}
-    .view.active::before,.view.active::after{display:none}
-    .page.left{border-right:0;border-bottom:1.5px solid #d8d0b8}
-    .page.right,.page.left{box-shadow:none}
-    .page{min-height:auto;padding:24px 20px 38px}
-    h1{font-size:25px}h2{font-size:20px}p,li{font-size:16px}
-    .bar select{max-width:62vw}
-    .bar .legend{display:none}
-    .sandbox iframe{height:380px}
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 手帐 · 大模型算法工程师求职路线图</title>
+  <meta name="description" content="从小白到大模型算法工程师的求职导向学习路线图:数学→深度学习→预训练→微调对齐→部署应用">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/themes/vue.css">
+  <style>
+    :root{
+      --paper:#fbf8f0; --ink:#23201a; --blue:#2a55b3; --red:#c63a2f;
+    }
+    body{font-family:'PingFang SC','Microsoft YaHei','Helvetica Neue',sans-serif;background:var(--paper);color:var(--ink)}
+    /* 手帐风格的标题 */
+    .markdown-section h1{font-weight:700;border-bottom:2px solid rgba(120,110,85,.4);padding-bottom:6px}
+    .markdown-section h2{color:var(--blue);border-left:5px solid var(--blue);padding-left:10px}
+    /* 便利贴/标签样式 */
+    .markdown-section blockquote{
+      border-left:4px solid var(--blue);background:rgba(228,236,255,.35);
+      padding:8px 14px;color:#3a3528;border-radius:0 4px 4px 0
+    }
+    /* 高亮强调 */
+    .markdown-section strong{color:var(--red)}
+    /* 侧边栏品牌 */
+    .app-name a{font-weight:700;color:var(--blue)!important}
+    /* 表格更紧凑 */
+    .markdown-section table{display:table;width:100%}
+  </style>
 </head>
 <body>
+  <div id="app">加载中…如果一直转圈,请检查网络(首次加载需拉取 Docsify)</div>
 
-<div class="bar">
-  <span class="brand">📘 AI 手帐</span>
-  <select id="page" aria-label="选择页面">
-    <optgroup label="· 知识体系 ·">
-      <option value="map">P01-02 · AI 总知识地图</option>
-      <option value="ml">P03-04 · 机器学习基本范式</option>
-      <option value="gd" selected>P05-06 · 梯度下降</option>
-      <option value="tf">P07-08 · Transformer 结构</option>
-      <option value="rl">P09-10 · 强化学习入门</option>
-      <option value="math">P11-12 · 数学基础</option>
-    </optgroup>
-    <optgroup label="· 模板页 ·">
-      <option value="log">P13-14 · 每日学习日志（示例）</option>
-      <option value="paper">P15-16 · 论文阅读页（示例）</option>
-      <option value="exp">P17-18 · 实验记录页（示例）</option>
-    </optgroup>
-  </select>
-  <label><input type="checkbox" id="t-grid" checked> 网格</label>
-  <span class="legend"><span class="s-star">★</span>核心 <span class="s-q">?</span>未懂 <span class="s-e">!</span>易错 <span class="s-link">→</span>联系 <span class="s-exp">Exp</span>实验 <span class="s-idea">Idea</span>灵感</span>
-  <span class="sp"></span>
-  <a class="enter-tutorial" href="docs/" target="_blank">📖 进入完整教程 →</a>
-  <span class="note">← / → 翻页 · 右页绿色框可在线跑代码</span>
-</div>
+  <script>
+    window.$docsify = {
+      name: '📘 AI 手帐',
+      repo: 'https://github.com/YuanyuanMa03/ai-to-llm-engineer',
 
-<main class="book">
-  <div class="spread">
+      // 侧边栏
+      loadSidebar: true,
+      subMaxLevel: 3,
+      alias: { '/.*/_sidebar.md': '/_sidebar.md' },
 
-    <!-- ===================== P01-02 AI 总知识地图 ===================== -->
-    <section class="view" data-view="map">
-      <div class="page left has-grid">
-        <div class="ph"><span class="date">2026.08.05</span><span class="tag">P01 · 知识地图</span></div>
-        <h1>AI 学习总图</h1>
-        <div class="quote">不只记录"它是什么"，还要记录<span class="hl">"为什么这样设计"</span>。</div>
-        <h2>主线 <span class="s-star">★</span></h2>
-        <p class="ascii">数学基础 → 机器学习 → 神经网络
-       → Transformer → 大模型 → Agent → AI Infra</p>
-        <h2>四块拼图</h2>
-        <ul>
-          <li><span class="k">基础</span>：线代 / 概率 / 优化 / 信息论</li>
-          <li><span class="k">机器学习</span>：监督 · 无监督 · 强化</li>
-          <li><span class="k">深度学习</span>：CNN · RNN · Transformer</li>
-          <li><span class="k">工程</span>：训练 · 推理 · Infra · 评测</li>
-        </ul>
-        <div class="box blue"><p style="margin:0"><b>本质：</b>ML 从数据学规律；DL 用多层网络学表示；RL 靠交互学决策；LLM 在大规模数据上学通用表示；Agent 把模型放入<span class="hl">工具+记忆+环境</span>闭环。</p></div>
-        <div class="tpl-h">学习路径 <span class="s-link">→</span></div>
-        <p class="note">每页右下角有<span class="hl-g">绿色沙盒</span>，可在浏览器里真跑代码验证。</p>
-        <span class="tag-sticky">先读综述 → 抠一页细节 → 临摹 + 跑代码</span>
-        <span class="pgnum">— P1 —</span>
-      </div>
-      <div class="page right has-grid">
-        <div class="ph"><span class="date">分支速查</span><span class="tag">P02</span></div>
-        <div class="res">
-          <a class="run" href="https://jupyterlite.github.io/demo/lab/index.html" target="_blank">↗ JupyterLite 在线 Python</a>
-        </div>
-        <pre class="ascii">AI
-├─ 机器学习 ML
-│   ├─ 监督/无监督/自监督
-│   └─ 强化学习 RL
-├─ 深度学习 DL
-│   ├─ MLP · CNN · RNN
-│   └─ Transformer ★
-├─ 大语言模型 LLM
-│   ├─ 预训练 · 对齐 · 推理
-└─ Agent · AI Infra</pre>
-        <h3>每块对应资源 <span class="s-link">→</span></h3>
-        <table class="tbl">
-          <tr><th>板块</th><th>本手帐</th><th>真实代码库</th></tr>
-          <tr><td>数学基础</td><td>P11-12</td><td>3Blue1Brown + numpy</td></tr>
-          <tr><td>梯度下降</td><td>P05-06</td><td>karpathy/micrograd</td></tr>
-          <tr><td>Transformer</td><td>P07-08</td><td>Annotated Transformer</td></tr>
-          <tr><td>强化学习</td><td>P09-10</td><td>CleanRL + Gymnasium</td></tr>
-        </table>
-        <div class="box red"><p style="margin:0"><span class="s-e">!</span> <b>易错：</b>深度学习 ⊂ 机器学习，<b>不是</b>并列；Transformer 不只为 LLM，ViT 也用它。</p></div>
-        <!-- 沙盒：Python 基础自检 -->
-        <div class="sandbox" data-code="import sys; print('Python', sys.version.split()[0]); print('手帐沙盒已就绪 ✅')">
-          <div class="sandbox-bar"><span class="dot"></span>🧪 试一下：验证沙盒能跑 <span class="hint">点击展开 ▾</span></div>
-          <div class="sandbox-body"><div class="loading">加载中（首次约 5-10 秒拉 Pyodide）…</div></div>
-        </div>
-        <span class="pgnum">— P2 —</span>
-      </div>
-    </section>
+      // 首页 = 根 README.md
+      homepage: 'README.md',
 
-    <!-- ===================== P03-04 机器学习基本范式 ===================== -->
-    <section class="view" data-view="ml">
-      <div class="page left has-grid">
-        <div class="ph"><span class="date">2026.08.05</span><span class="tag">P03 · ML 范式</span></div>
-        <h1>机器学习基本范式</h1>
-        <div class="quote">核心问题：<span class="hl">模型根据什么信息做出预测？</span></div>
-        <h2>三种学习范式 <span class="s-star">★</span></h2>
-        <ul>
-          <li><span class="k">监督</span>：有标签 X→Y（分类/回归）</li>
-          <li><span class="k">无监督</span>：无标签找结构（聚类/降维）</li>
-          <li><span class="k">强化</span>：有奖励学策略</li>
-          <li><span class="k">自监督</span>：从数据自身造标签（MLM）</li>
-        </ul>
-        <h2>核心目标 <span class="s-star">★</span></h2>
-        <div class="box blue"><p style="margin:0">在<span class="hl">训练集</span>学规律，能<b>泛化</b>到<span class="hl-g">未知数据</span>。</p></div>
-        <h2>偏差—方差</h2>
-        <p><span class="k">偏差</span>太简单→欠拟合；<span class="k">方差</span>太复杂→过拟合；<span class="k">噪声</span>是误差下限。</p>
-        <h3>评估指标</h3>
-        <p class="note">分类：Acc/P/R/F1/AUC | 回归：MAE/MSE/RMSE/R²</p>
-        <span class="pgnum">— P3 —</span>
-      </div>
-      <div class="page right has-grid">
-        <div class="ph"><span class="date">诊断 &amp; 实验</span><span class="tag">P04</span></div>
-        <table class="tbl">
-          <tr><th>现象</th><th>判断</th><th>对策</th></tr>
-          <tr><td>训练好测试差</td><td><span class="e">过拟合</span></td><td>加数据/正则/Dropout</td></tr>
-          <tr><td>训练也差</td><td><span class="e">欠拟合</span></td><td>加特征/容量/训久</td></tr>
-        </table>
-        <h3>数据集划分 <span class="s-star">★</span></h3>
-        <ul><li><span class="k">训练集</span>学参数 · <span class="k">验证集</span>调超参 · <span class="k">测试集</span>只看一次</li></ul>
-        <div class="box red"><p style="margin:0"><span class="s-e">!</span> <b>易错：</b>测试集只在最后看一次；调参只能用 train/val。</p></div>
-        <!-- 沙盒：手写 KNN 分类 -->
-        <div class="sandbox" data-code="import numpy as np
-# === 手写 KNN：最直观的监督学习 ===
-def knn(X_train, y_train, x, k=3):
-    d = np.sum((X_train - x)**2, axis=1)   # 欧氏距离
-    idx = np.argsort(d)[:k]                # 最近的 k 个
-    return np.bincount(y_train[idx]).argmax()
+      // 中文搜索(本地索引)
+      search: {
+        placeholder: '搜索教程',
+        noData: '没有找到结果',
+        depth: 3,
+        hideOtherSidebarContent: false
+      },
 
-X = np.array([[1,1],[1.5,1.8],[5,5],[6,5.5]])
-y = np.array([0,0,1,1])                    # 0=A类 1=B类
-print('点 [2,2] 预测为类', knn(X,y,[2,2]))   # 应为 0
-print('点 [5.5,5] 预测为类', knn(X,y,[5.5,5]))# 应为 1">
-          <div class="sandbox-bar"><span class="dot"></span>🧪 试一下：手写 KNN 分类 <span class="hint">点击展开 ▾</span></div>
-          <div class="sandbox-body"><div class="loading">加载中…</div></div>
-        </div>
-        <p class="note"><span class="s-link">→</span> 改 k=1 再跑，看分类是否变敏感（过拟合倾向）。</p>
-        <span class="pgnum">— P4 —</span>
-      </div>
-    </section>
+      // 页脚
+      loadFooter: '_footer.md',
 
-    <!-- ===================== P05-06 梯度下降（micrograd） ===================== -->
-    <section class="view active" data-view="gd">
-      <div class="page left has-grid">
-        <div class="ph"><span class="date">2026.08.05</span><span class="tag">P05 · 梯度下降</span></div>
-        <h1>梯度下降</h1>
-        <div class="tpl-h">一句话定义</div>
-        <div class="quote">沿<span class="hl">损失下降最快</span>的方向更新参数。</div>
-        <div class="tpl-h">核心公式 <span class="s-star">★</span></div>
-        <div class="formula">θ ← θ − η · ∇L(θ)</div>
-        <p><span class="k">θ</span>参数 · <span class="k">η</span>学习率 · <span class="k">∇L(θ)</span>损失对参数的梯度</p>
-        <div class="tpl-h">为什么这样设计</div>
-        <p>梯度指向<span class="k">上升最快</span>方向 → 沿<span class="hl">负梯度</span>走下降最快。</p>
-        <div class="tpl-h">我的直觉</div>
-        <div class="box blue"><p style="margin:0">像<span class="hl">蒙眼下山</span>——坡度是梯度，步长是学习率，谷底是最优解。</p></div>
-        <div class="tpl-h">三种变体</div>
-        <ul><li>BGD 全量稳但慢 · SGD 单样本快但抖 · Mini-batch 工程默认</li></ul>
-        <div class="box red"><p style="margin:0"><span class="s-e">!</span> 梯度指向<span class="hl">上升</span>，要<b>减</b>别记成加。</p></div>
-        <span class="pgnum">— P5 —</span>
-      </div>
-      <div class="page right has-grid">
-        <div class="ph"><span class="date">代码 &amp; 实验</span><span class="tag">P06 · micrograd</span></div>
-        <div class="tpl-h">真实代码库 <span class="s-link">→</span> Karpathy/micrograd</div>
-        <div class="res">
-          <a class="paper" href="https://www.youtube.com/watch?v=VMj-3S1tku0" target="_blank">📺 Karpathy 视频讲解</a>
-          <a class="colab" href="https://colab.research.google.com/github/karpathy/micrograd/blob/master/demo.ipynb" target="_blank">↗ Open in Colab</a>
-        </div>
-        <details class="src"><summary>📄 micrograd/engine.py 核心反向传播（94 行，点开看）</summary>
-<pre class="codeblock"># Karpathy/micrograd · engine.py（节选）
-class Value:
-    def __init__(self, data, _children=(), _op=''):
-        self.data = data; self.grad = 0
-        self._backward = lambda: None
-        self._prev = set(_children); self._op = _op
+      // 自动跳转标题
+      auto2top: true,
+      relativePath: true,
 
-    def __add__(self, other):
-        other = other if isinstance(other, Value) else Value(other)
-        out = Value(self.data + other.data, (self, other), '+')
-        def _backward():
-            self.grad += 1.0 * out.grad
-            other.grad += 1.0 * out.grad
-        out._backward = _backward
-        return out
+      // 主题色
+      themeColor: '#2a55b3',
 
-    def __mul__(self, other):
-        other = other if isinstance(other, Value) else Value(other)
-        out = Value(self.data * other.data, (self, other), '*')
-        def _backward():
-            self.grad += other.data * out.grad
-            other.grad += self.data * out.grad
-        out._backward = _backward
-        return out
+      // 备用:封面
+      coverpage: false,
 
-    def backward(self):  # 拓扑排序 + 反向传播
-        topo, visited = [], set()
-        def build(v):
-            if v not in visited:
-                visited.add(v)
-                for child in v._prev: build(child)
-                topo.append(v)
-        build(self)
-        self.grad = 1.0
-        for node in reversed(topo): node._backward()</pre>
-        </details>
-        <!-- 沙盒：从零实现梯度下降 -->
-        <div class="sandbox" data-code="# === 从零实现梯度下降：求 y=x² 的最小值 ===
-# 对应左页公式 θ ← θ - η·∇L(θ)
-x = 3.0            # 起始点
-lr = 0.1           # 学习率 η
-for step in range(15):
-    grad = 2 * x   # ∇L = d(x²)/dx = 2x
-    x = x - lr * grad
-    print(f'step {step:2d}: x={x:6.4f}  loss={x*x:8.6f}')
-print('真解应为 0，梯度下降收敛到:', round(x,5))">
-          <div class="sandbox-bar"><span class="dot"></span>🧪 试一下：手写梯度下降求最小值 <span class="hint">点击展开 ▾</span></div>
-          <div class="sandbox-body"><div class="loading">加载中…</div></div>
-        </div>
-        <p class="note"><span class="s-link">→</span> 把 lr 改成 1.1 看发散；改成 0.01 看缓慢。<span class="s-idea">Idea</span>：把 2*x 换成 sigmoid 的导数试试。</p>
-        <span class="pgnum">— P6 —</span>
-      </div>
-    </section>
+      plugins: [
+        // 编辑本文按钮
+        function(hook, vm) {
+          hook.afterEach(function(html) {
+            if (/README/.test(vm.route.file)) return html;
+            var url = 'https://github.com/YuanyuanMa03/ai-to-llm-engineer/blob/main/' + vm.route.file;
+            return html + '<hr><p style="font-size:13px;color:#8a8068">📝 发现错误? <a href="' + url + '" target="_blank">在 GitHub 上编辑本页</a></p>';
+          });
+        }
+      ]
+    };
+  </script>
 
-    <!-- ===================== P07-08 Transformer ===================== -->
-    <section class="view" data-view="tf">
-      <div class="page left has-grid">
-        <div class="ph"><span class="date">2026.08.05</span><span class="tag">P07 · Transformer</span></div>
-        <h1>Transformer 结构</h1>
-        <div class="quote">用 <span class="k">Self-Attention</span> 替代 RNN：<span class="hl">全并行</span>、长程依赖好。</div>
-        <div class="tpl-h">核心公式 <span class="s-star">★</span></div>
-        <div class="formula">Attention(Q,K,V) = softmax(QKᵀ/√dₖ)·V</div>
-        <ul>
-          <li><span class="k">Q</span>查询 / <span class="k">K</span>键 / <span class="k">V</span>值</li>
-          <li><span class="k">√dₖ</span>：防点积过大导致 softmax 饱和</li>
-          <li>Multi-Head：多头并行再拼接</li>
-        </ul>
-        <div class="tpl-h">结构图</div>
-        <pre class="ascii">token→[Embed+位置编码]
-        ↓
- ┌ Multi-Head Attention ┐
- │  Add &amp; LayerNorm      │ ×N
- └ Feed-Forward (MLP) ──┘
-        ↓
-   Logits→softmax</pre>
-        <div class="tpl-h">为什么这样设计</div>
-        <p class="note">RNN 必须逐步算无法并行；Attention 让每个位置直接看所有位置。</p>
-        <span class="pgnum">— P7 —</span>
-      </div>
-      <div class="page right has-grid">
-        <div class="ph"><span class="date">论文 &amp; 实现</span><span class="tag">P08 · Annotated Transformer</span></div>
-        <div class="tpl-h">原论文 <span class="s-paper">Paper</span></div>
-        <div class="res">
-          <a class="paper" href="https://arxiv.org/abs/1706.03762" target="_blank">📄 Attention Is All You Need (arXiv)</a>
-        </div>
-        <div class="tpl-h">逐行注释实现 <span class="s-link">→</span> 可直接嵌入</div>
-        <div class="embed-wrap embed-tall">
-          <div class="cap">📖 The Annotated Transformer · Harvard NLP（可滚动浏览）</div>
-          <iframe src="https://nlp.seas.harvard.edu/annotated-transformer/" loading="lazy"></iframe>
-        </div>
-        <!-- 沙盒：手算 attention -->
-        <div class="sandbox" data-code="import numpy as np
-# === 手写 Scaled Dot-Product Attention ===
-def softmax(x):
-    e = np.exp(x - x.max(axis=-1, keepdims=True))
-    return e / e.sum(axis=-1, keepdims=True)
-
-Q = np.array([[1,0],[0,1]])     # 2 个 query
-K = np.array([[1,0],[0,1]])     # 2 个 key
-V = np.array([[10,0],[0,10]])   # 2 个 value
-d_k = K.shape[-1]
-attn = softmax(Q @ K.T / np.sqrt(d_k))   # [2,2] 注意力权重
-out = attn @ V                           # [2,2] 加权聚合
-print('注意力权重:\n', np.round(attn,3))
-print('输出:\n', out)
-print('→ 第1个 query 主要关注第1个 value，符合对角结构')">
-          <div class="sandbox-bar"><span class="dot"></span>🧪 试一下：手算 2×2 Attention <span class="hint">点击展开 ▾</span></div>
-          <div class="sandbox-body"><div class="loading">加载中…</div></div>
-        </div>
-        <div class="box red"><p style="margin:0"><span class="s-e">!</span> Causal Mask 是<span class="hl">上三角屏蔽</span>（未来 token）；Encoder 不加，Decoder 才加。</p></div>
-        <span class="pgnum">— P8 —</span>
-      </div>
-    </section>
-
-    <!-- ===================== P09-10 强化学习入门（CleanRL）===================== -->
-    <section class="view" data-view="rl">
-      <div class="page left has-grid">
-        <div class="ph"><span class="date">2026.08.05</span><span class="tag">P09 · 强化学习入门</span></div>
-        <h1>强化学习入门</h1>
-        <div class="quote">先抓交互闭环：<span class="hl">状态→动作→奖励→新状态</span>。</div>
-        <div class="tpl-h">四个核心对象 <span class="s-star">★</span></div>
-        <ul>
-          <li><span class="k">Agent</span>：做决策的主体</li>
-          <li><span class="k">Environment</span>：环境</li>
-          <li><span class="k">State</span>：当前状态</li>
-          <li><span class="k">Action / Reward</span>：动作与回报</li>
-        </ul>
-        <div class="tpl-h">核心概念</div>
-        <p><span class="k">Policy π</span>：策略，状态到动作的映射<br>
-           <span class="k">Value V</span>：从某状态出发的期望回报<br>
-           <span class="k">Return G</span>：累积折扣奖励</p>
-        <div class="tpl-h">学习路线 <span class="s-link">→</span></div>
-        <p class="ascii">MDP → Bellman → Q-Learning
-   → DQN → Policy Gradient
-   → Actor-Critic → PPO → RLHF</p>
-        <div class="tpl-h">每个算法回答四问 <span class="s-star">★</span></div>
-        <ul><li>学什么？用什么更新？on/off-policy？解决了什么？</li></ul>
-        <span class="pgnum">— P9 —</span>
-      </div>
-      <div class="page right has-grid">
-        <div class="ph"><span class="date">代码 &amp; 可视化</span><span class="tag">P10 · CleanRL</span></div>
-        <div class="tpl-h">真实代码库 <span class="s-link">→</span> CleanRL（单文件实现）</div>
-        <div class="res">
-          <a class="colab" href="https://colab.research.google.com/github/vwxyzjn/cleanrl/blob/master/docs/get-started/CleanRL_Huggingface_Integration_Demo.ipynb" target="_blank">↗ CleanRL Colab Demo</a>
-          <a class="run" href="https://gymnasium.farama.org/" target="_blank">↗ Gymnasium 文档</a>
-        </div>
-        <details class="src"><summary>📄 CleanRL/ppo.py 核心循环（308 行，节选）</summary>
-<pre class="codeblock"># CleanRL · ppo.py 核心训练循环（节选）
-for update in range(num_updates):
-    # 1. 收集 rollout
-    for step in range(num_steps):
-        action, logprob, _, value = agent.get_action_and_value(next_obs)
-        next_obs, reward, done, info = envs.step(action)
-        # 存入 buffer ...
-
-    # 2. 算 GAE 优势
-    with torch.no_grad():
-        next_value = agent.get_value(next_obs)
-        advantages = torch.zeros_like(rewards)
-        lastgaelam = 0
-        for t in reversed(range(num_steps)):
-            nextnonterminal = 1.0 - nextdone[t]
-            delta = rewards[t] + gamma * nextvalue * nextnonterminal - values[t]
-            advantages[t] = lastgaelam = delta + gamma * 0.95 * lastgaelam * nextnonterminal
-            nextvalue = values[t]
-        returns = advantages + values
-
-    # 3. PPO 更新（带 clip）
-    for epoch in range(num_epochs):
-        for mb in minibatches:
-            _, newlogprob, entropy, newvalue = agent.get_action_and_value(mb.obs, mb.actions)
-            logratio = newlogprob - mb.logprobs
-            ratio = logratio.exp()
-            # clip 是 PPO 的核心：限制策略变化幅度
-            mb_advantages = mb.advantages - mb.advantages.mean()
-            pg_loss = -(mb_advantages * torch.clamp(ratio, 1-0.2, 1+0.2)).mean()</pre>
-        </details>
-        <div class="tpl-h">浏览器内 RL 可视化（DQN 玩 CartPole）</div>
-        <div class="embed-wrap embed-video">
-          <div class="cap">🎮 TensorFlow.js · DQN CartPole（纯浏览器训练）</div>
-          <iframe src="https://storage.googleapis.com/tfjs-examples/cartpole-dqn/index.html" loading="lazy"></iframe>
-        </div>
-        <p class="note"><span class="s-link">→</span> 点 "Train" 看 reward 曲线上升。这就是 RL 的"试错学习"。</p>
-        <span class="pgnum">— P10 —</span>
-      </div>
-    </section>
-
-    <!-- ===================== P11-12 数学基础（3Blue1Brown + numpy）===================== -->
-    <section class="view" data-view="math">
-      <div class="page left has-grid">
-        <div class="ph"><span class="date">2026.08.05</span><span class="tag">P11 · 数学基础</span></div>
-        <h1>数学基础</h1>
-        <div class="quote">不用系统重学，<span class="hl">遇到一个补一个</span>，重点记"它解决了什么问题"。</div>
-        <div class="tpl-h">核心清单 <span class="s-star">★</span></div>
-        <ul>
-          <li><span class="k">线代</span>：向量/矩阵/特征值</li>
-          <li><span class="k">概率</span>：分布/贝叶斯/期望方差</li>
-          <li><span class="k">微积分</span>：导数/梯度/链式法则</li>
-          <li><span class="k">优化</span>：最大似然/梯度下降</li>
-          <li><span class="k">信息论</span>：熵/交叉熵/KL 散度</li>
-        </ul>
-        <div class="tpl-h">为什么要学这些</div>
-        <div class="box blue"><p style="margin:0">梯度 = 损失下降方向；矩阵 = 数据形状；概率 = 模型不确定性；交叉熵 = 分类损失的本质。</p></div>
-        <div class="tpl-h">视频直觉 <span class="s-link">→</span> 3Blue1Brown</div>
-        <p class="note">线代本质（16 集）+ 微积分本质（12 集），建议每页对应 1-2 集。</p>
-        <span class="pgnum">— P11 —</span>
-      </div>
-      <div class="page right has-grid">
-        <div class="ph"><span class="date">视频 &amp; 练习</span><span class="tag">P12 · 3B1B + numpy</span></div>
-        <div class="tpl-h">线性代数的本质（YouTube 嵌入）</div>
-        <div class="embed-wrap embed-video">
-          <div class="cap">🎬 3Blue1Brown · 线性代数的本质 第1集</div>
-          <iframe src="https://www.youtube-nocookie.com/embed/fNk_zzaMoSs?list=PLZHQObOWTQDPD3MizzM2xVUpgQG6RR1tC" loading="lazy" allowfullscreen></iframe>
-        </div>
-        <div class="res">
-          <a class="video" href="https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVUpgQG6RR1tC" target="_blank">▶ 线代全集</a>
-          <a class="video" href="https://www.youtube.com/playlist?list=PLZHQObOWTQDMsr9K-rj53DwVRMYO3S5vO" target="_blank">▶ 微积分全集</a>
-          <a class="run" href="https://raw.githubusercontent.com/rougier/numpy-100/master/100_Numpy_exercises.md" target="_blank">↗ numpy 100 题</a>
-        </div>
-        <!-- 沙盒：numpy 向量/矩阵直觉 -->
-        <div class="sandbox" data-code="import numpy as np
-# === 矩阵乘法 = 线性变换的复合 ===
-A = np.array([[1,0],[0,-1]])   # y 轴翻转
-B = np.array([[0,-1],[1,0]])   # 旋转 90°
-v = np.array([1,2])            # 一个向量
-
-print('原向量 v =', v)
-print('A·v (y翻转) =', A @ v)
-print('B·v (转90°) =', B @ v)
-print('B@B·v (转180°) =', B @ B @ v)
-print()
-print('特征值（看变换的本质）:')
-print('A 的特征值:', np.linalg.eigvals(A))
-print('→ 特征值 -1 表示在该方向被翻转')">
-          <div class="sandbox-bar"><span class="dot"></span>🧪 试一下：矩阵即线性变换 <span class="hint">点击展开 ▾</span></div>
-          <div class="sandbox-body"><div class="loading">加载中…</div></div>
-        </div>
-        <p class="note"><span class="s-link">→</span> 把 A 改成 [[2,0],[0,1]] 看缩放；特征值就是缩放因子。</p>
-        <span class="pgnum">— P12 —</span>
-      </div>
-    </section>
-
-    <!-- ===================== P13-14 日志模板（示例）===================== -->
-    <section class="view" data-view="log">
-      <div class="page left has-grid">
-        <div class="ph"><span class="date">2026.08.05</span><span class="tag">P13 · 学习日志（示例）</span></div>
-        <h1>每日学习日志</h1>
-        <p class="note">知识卡不一定每天写，但日志可每天半页。</p>
-        <div class="tpl-h">今天研究的主题</div>
-        <div class="quote">Transformer 中的 Self-Attention</div>
-        <div class="tpl-h">今天真正理解的一件事 <span class="s-star">★</span></div>
-        <div class="box blue"><p style="margin:0">Attention 不是找"最重要的词"，而是针对当前 <span class="k">Query</span>，从所有 <span class="k">Key</span> 中<span class="hl">动态聚合 Value</span>。</p></div>
-        <div class="tpl-h">一个知识连接 <span class="s-link">→</span></div>
-        <p>Attention ≈ 数据库检索：Query 查，Key 匹配，Value 被读。</p>
-        <span class="pgnum">— P13 —</span>
-      </div>
-      <div class="page right has-grid">
-        <div class="ph"><span class="date">反思</span><span class="tag">P14</span></div>
-        <div class="tpl-h">今天仍模糊的地方 <span class="s-q">?</span></div>
-        <ul><li class="note">多头注意力为什么一定比单头更好？</li><li class="note">head 多到多少收益递减？</li></ul>
-        <div class="tpl-h">一个可验证实验 <span class="s-exp">Exp</span></div>
-        <p>比较不同 head 数量（1/4/8/16）对小型 LM 的效果。</p>
-        <div class="tpl-h">灵感 <span class="s-idea">Idea</span></div>
-        <div class="box green"><p style="margin:0">可视化某层 Attention 的"检索模式"，看不同层是否对应不同语义角色。</p></div>
-        <div class="tpl-h">今日一句话</div>
-        <div class="quote">注意力核心不是记忆，而是<span class="hl">根据当前问题动态读取信息</span>。</div>
-        <p class="tag-sticky">明天：实现一个最小 Self-Attention</p>
-        <span class="pgnum">— P14 —</span>
-      </div>
-    </section>
-
-    <!-- ===================== P15-16 论文阅读模板（示例）===================== -->
-    <section class="view" data-view="paper">
-      <div class="page left has-grid">
-        <div class="ph"><span class="date">论文阅读</span><span class="tag">P15 · 示例：Attention 论文</span></div>
-        <h1>论文阅读笔记</h1>
-        <p class="note">固定七项，不抄摘要。</p>
-        <div class="tpl-h">1. 解决什么问题 <span class="s-star">★</span></div>
-        <p>序列建模依赖 RNN，导致<b>无法并行</b>、长程依赖弱。</p>
-        <div class="tpl-h">2. 以前方法为什么不够</div>
-        <ul><li>RNN 必须逐步算，训练慢</li><li>长序列梯度消失</li></ul>
-        <div class="tpl-h">3. 核心假设</div>
-        <div class="quote">仅靠注意力（不靠循环/卷积）就能建模序列依赖。</div>
-        <div class="tpl-h">4. 真正的新东西</div>
-        <ul><li><span class="k">Scaled Dot-Product Attention</span></li><li><span class="k">Multi-Head</span> + 位置编码</li></ul>
-        <span class="pgnum">— P15 —</span>
-      </div>
-      <div class="page right has-grid">
-        <div class="ph"><span class="date">评价 &amp; 启发</span><span class="tag">P16</span></div>
-        <div class="tpl-h">5. 实验如何证明</div>
-        <p>WMT 翻译超越当时最优，训练时间显著缩短。</p>
-        <div class="tpl-h">6. 限制 <span class="s-e">!</span></div>
-        <ul><li>自注意力 O(S²) 显存/计算</li><li>原位置编码长序列外推弱</li></ul>
-        <div class="tpl-h">7. 对我的启发 <span class="s-idea">Idea</span></div>
-        <div class="box green"><p style="margin:0">"算子并行化"比"算子精巧"更重要——<span class="hl">硬件友好性</span>决定方法能否规模化。</p></div>
-        <div class="tpl-h">三句话讲给别人听</div>
-        <ol style="font-size:16px;line-height:1.6;padding-left:18px">
-          <li>RNN 太慢，得一个一个算。</li>
-          <li>Transformer 用注意力让所有位置直接对话。</li>
-          <li>为不丢顺序，额外加位置编码。</li>
-        </ol>
-        <p class="tag-sticky">复现：最小 Transformer 翻译 demo</p>
-        <span class="pgnum">— P16 —</span>
-      </div>
-    </section>
-
-    <!-- ===================== P17-18 实验记录模板（示例）===================== -->
-    <section class="view" data-view="exp">
-      <div class="page left has-grid">
-        <div class="ph"><span class="date">实验记录</span><span class="tag">P17 · 示例：lr 影响</span></div>
-        <h1>项目实验页</h1>
-        <p class="note">AI 学习最终要落到代码和实验。</p>
-        <div class="tpl-h">实验名称 <span class="s-exp">Exp</span></div>
-        <div class="quote">不同学习率对模型收敛的影响</div>
-        <div class="tpl-h">假设 <span class="s-star">★</span></div>
-        <p>学习率过大→震荡，过小→收敛缓慢。</p>
-        <div class="tpl-h">控制变量</div>
-        <ul><li>模型/数据/种子/轮数相同</li></ul>
-        <div class="tpl-h">自变量</div>
-        <p><code>lr ∈ {1e-2, 1e-3, 1e-4}</code></p>
-        <span class="pgnum">— P17 —</span>
-      </div>
-      <div class="page right has-grid">
-        <div class="ph"><span class="date">结果 &amp; 结论</span><span class="tag">P18</span></div>
-        <table class="tbl">
-          <tr><th>lr</th><th>50步 loss</th><th>val acc</th><th>表现</th></tr>
-          <tr><td>1e-2</td><td>2.81↑</td><td>0.71</td><td><span class="e">震荡</span></td></tr>
-          <tr><td>1e-3</td><td>0.42</td><td>0.89</td><td><span class="hl-g">最佳</span></td></tr>
-          <tr><td>1e-4</td><td>1.20</td><td>0.83</td><td>偏慢</td></tr>
-        </table>
-        <div class="tpl-h">结论 <span class="s-star">★</span></div>
-        <div class="box blue"><p style="margin:0">当前配置下 <span class="hl-g">lr=1e-3</span> 收敛速度与稳定性最好。</p></div>
-        <div class="tpl-h">注意 <span class="s-e">!</span></div>
-        <div class="box red"><p style="margin:0">不写绝对结论，要写"<b>在当前数据、模型、参数下</b>"。换数据集需重做。</p></div>
-        <p class="tag-sticky">下一步：加 warmup 再试 1e-3</p>
-        <span class="pgnum">— P18 —</span>
-      </div>
-    </section>
-
-  </div>
-</main>
-
-<script>
-  const sel = document.getElementById('page');
-  const views = document.querySelectorAll('.view');
-  function show(v){ views.forEach(x=> x.classList.toggle('active', x.dataset.view===v)); }
-  sel.addEventListener('change', e=> show(e.target.value));
-  show(sel.value);
-
-  document.getElementById('t-grid').addEventListener('change', e=> document.body.classList.toggle('no-grid', !e.target.checked));
-
-  // === JupyterLite 沙盒：点击才加载 iframe，避免多个 Pyodide 实例 ===
-  function jlUrl(code){
-    return 'https://jupyterlite.github.io/demo/repl/index.html?toolbar=1&kernel=python&code=' + encodeURIComponent(code);
-  }
-  document.querySelectorAll('.sandbox').forEach(sb=>{
-    const bar = sb.querySelector('.sandbox-bar');
-    const body = sb.querySelector('.sandbox-body');
-    const code = sb.dataset.code || '';
-    let loaded = false;
-    bar.addEventListener('click', ()=>{
-      sb.classList.toggle('open');
-      if(sb.classList.contains('open') && !loaded){
-        bar.querySelector('.hint').textContent = '加载中…';
-        const ifr = document.createElement('iframe');
-        ifr.src = jlUrl(code);
-        body.innerHTML = '';
-        body.appendChild(ifr);
-        ifr.addEventListener('load', ()=>{
-          loaded = true;
-          bar.querySelector('.hint').textContent = '已加载 ▴';
-        });
-      }
-    });
-  });
-
-  // 键盘翻页
-  const order = ['map','ml','gd','tf','rl','math','log','paper','exp'];
-  document.addEventListener('keydown', e=>{
-    if(e.target.tagName==='SELECT'||e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA') return;
-    const i = order.indexOf(sel.value);
-    if(e.key==='ArrowRight' && i<order.length-1){ sel.value=order[i+1]; show(sel.value); }
-    if(e.key==='ArrowLeft'  && i>0){ sel.value=order[i-1]; show(sel.value); }
-  });
-</script>
+  <!-- Docsify 核心 (锁版本,避免主版本漂移导致渲染失效) -->
+  <script src="//cdn.jsdelivr.net/npm/docsify@4.13.1"></script>
+  <!-- 插件:搜索 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify@4.13.1/plugins/search.min.js"></script>
+  <!-- 插件:代码高亮 -->
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+  <!-- 插件:数学公式 KaTeX (docsify-katex 1.x 最新,与 katex@0.16.9 兼容) -->
+  <script src="//cdn.jsdelivr.net/npm/docsify-katex@1.4.5/dist/docsify-katex.js"></script>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <!-- 插件:页脚 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify@4.13.1/plugins/emoji.min.js"></script>
 </body>
 </html>
