@@ -4,6 +4,9 @@
 
 这是一份**求职导向**的大模型算法工程师学习路线图。每一节都把知识、代码、面试考点、简历项目串成一条线。
 
+![AI 知识总览](assets/sketchnote-overview.png)
+> 手绘图来自 [microsoft/AI-For-Beginners](https://github.com/microsoft/AI-For-Beginners) by Tomomi Imura,MIT 协议
+
 ## 🗺️ 全链路路线图
 
 ```

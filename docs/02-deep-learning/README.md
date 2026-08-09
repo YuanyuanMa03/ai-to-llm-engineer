@@ -2,6 +2,8 @@
 
 > 目标:能从零写出 Attention,理解为什么 Transformer 能取代 RNN。
 
+![神经网络与深度学习总览](../assets/sketchnote-deeplearning.png)
+
 ## 这个阶段解决什么
 
 大模型的核心是 Transformer。但直接啃 Transformer 会一头雾水 —— 你得先懂反向传播、计算图,再懂 CNN/RNN 的局限,才能理解为什么 Attention 是一次范式跃迁。本阶段把这些串成一条因果链。
