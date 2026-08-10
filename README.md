@@ -1,15 +1,16 @@
 <div align="center">
 
-# AI 手帐
+# AI 手帐 · LLM Engineer Quest
 
-### 把大模型，学成你的主线任务。
+### 把大模型学成主线任务，把 Python 跑成打怪现场。
 
-一份面向中文学习者与求职者的「可通关」大模型工程教程。<br>
-从数学地基、Transformer、预训练与对齐，一路打到 RAG、Agent、部署和 MCP。
+一座面向中文学习者与求职者的「边学、边跑、边打怪」交互式实验场。<br>
+从数学地基、Transformer、预训练与对齐，一路打到 RAG、Agent、部署和 MCP；代码不只负责排版，还要当场交作业。
 
 [![在线体验](https://img.shields.io/badge/在线体验-打开手帐-EF4A43?style=for-the-badge&logo=githubpages&logoColor=white)](https://yuanyuanma03.github.io/ai-to-llm-engineer/)
 [![面试试炼](https://img.shields.io/badge/面试试炼-31_道题-12305A?style=for-the-badge)](https://yuanyuanma03.github.io/ai-to-llm-engineer/quiz/)
 [![课程关卡](https://img.shields.io/badge/课程关卡-16_关-F2C84B?style=for-the-badge&labelColor=12305A)](#学习路线)
+[![浏览器实验](https://img.shields.io/badge/Python-Pyodide_实验台-16847D?style=for-the-badge&logo=python&logoColor=white)](#代码不再负责看起来能跑)
 [![Language](https://img.shields.io/badge/Language-中文-16847D?style=for-the-badge)](#)
 
 **[开始学习](https://yuanyuanma03.github.io/ai-to-llm-engineer/)** · **[打开面试题库](https://yuanyuanma03.github.io/ai-to-llm-engineer/quiz/)** · **[练习手撕代码](https://yuanyuanma03.github.io/ai-to-llm-engineer/#/hand-coding)**
@@ -21,6 +22,22 @@
 </a>
 
 > 不是资源链接农场，也不是“看完等于学会”的电子安慰剂。这里把知识拆成关卡，把练习变成任务，把每次真正掌握变成可以盖章的进度。
+
+## 当前版本，一眼看懂
+
+| 模块 | 已上线内容 | 学习者拿到什么 |
+|---|---:|---|
+| **课程地图** | 6 个阶段 · 16 个关卡 | 从数学、深度学习到 Agent / MCP 的连续路线 |
+| **浏览器实验台** | Python · NumPy · Matplotlib · 跨代码格运行 | 编辑后立即看到文本、异常和图表反馈 |
+| **手撕训练** | 10 组可运行代码练习 | 把“我大概会”升级成“我可以现场写” |
+| **面试试炼** | 31 道分阶段题卡 | 随机抽题、难度筛选与掌握度自评 |
+| **游戏化进度** | 任务、XP、实验星、等级、连续学习天数 | 每次行动都有反馈，收藏夹终于不能代练 |
+| **运行方式** | 纯静态站点 · GitHub Pages | 无账号、无后端，打开网页即可学习 |
+
+```text
+读懂直觉 → 改一行代码 → 浏览器运行 → 查看输出 / 图表 / 报错
+    → 自动勾选“跑通代码” → +20 XP / 实验星 → 完成本关盖章
+```
 
 ## 为什么是一本「AI 手帐」
 
@@ -61,6 +78,19 @@
 - 无限循环会触发急停；错误会变成可读的 Bug Boss 面板，而不是一堵红色天书。
 - PyTorch、Transformers、MCP Server 等重型或服务端依赖会明确标记为「云端关卡」，仍可编辑和复制，不会假装浏览器什么都能炼。
 
+#### 实验台能力边界
+
+| 代码类型 | 网页内运行 | 反馈方式 |
+|---|:---:|---|
+| Python 标准库 | ✅ | 标准输出、表达式结果、可读异常 |
+| NumPy / 可由 Pyodide 加载的科学计算包 | ✅ | 首次按需加载，后续复用运行时 |
+| Matplotlib | ✅ | 自动捕获当前图表并贴回代码格下方 |
+| 同一页的前置兼容代码格 | ✅ | 「运行到这里」按顺序补跑，共享变量与函数 |
+| `input()` 交互 | 暂不支持 | 引导改成变量后运行 |
+| PyTorch / Transformers / vLLM / MCP Server | ☁️ 云端关卡 | 保留编辑、复制与本地 / Notebook 运行提示 |
+
+每次执行都有两道保险：运行阶段超过 20 秒会自动急停，运行时或依赖加载超过 120 秒会提示检查网络。手动点击「停止」会直接终止 Worker，下一次运行会得到一间干净的新实验室。
+
 ### 每一关都有明确的学习闭环
 
 ```text
@@ -95,6 +125,28 @@
 
 直接进入 [面试试炼场](https://yuanyuanma03.github.io/ai-to-llm-engineer/quiz/) 和 [手撕代码题合集](https://yuanyuanma03.github.io/ai-to-llm-engineer/#/hand-coding)，先答题，再回到对应关卡补洞。
 
+## 交互实验场是怎么工作的
+
+```mermaid
+flowchart LR
+    A["课程 Markdown"] --> B["Docsify 渲染"]
+    B --> C["代码格识别与编辑器"]
+    C --> D["Web Worker"]
+    D --> E["Pyodide / Python"]
+    E --> F["stdout / traceback / Matplotlib"]
+    F --> G["原地反馈"]
+    G --> H["任务进度 / XP / 实验星"]
+    H --> I["localStorage"]
+```
+
+- [`assets/code-lab-core.js`](assets/code-lab-core.js)：判断代码能否在浏览器运行、生成稳定实验 ID、压缩 Python 异常。
+- [`assets/code-lab.js`](assets/code-lab.js)：把课程代码块升级成编辑器，管理运行、急停、重置、复制和结果展示。
+- [`assets/python-worker.mjs`](assets/python-worker.mjs)：在独立 Worker 中加载 Pyodide、按需安装包、顺序执行代码格并捕获图表。
+- [`assets/app.js`](assets/app.js)：连接课程任务、通关状态、XP、实验星和首页玩家信息。
+- [`tests/code-lab-core.test.cjs`](tests/code-lab-core.test.cjs)：覆盖代码分类、稳定 ID 与错误清理等核心行为。
+
+> **边界说明：** Worker 能避免长任务直接卡住页面，但它不是用来运行不可信代码的强安全沙箱。课程实验代码来自本仓库，学习者也应只运行自己理解或信任的代码。
+
 ## 本地运行
 
 项目基于 Docsify，无需安装依赖或执行构建：
@@ -102,10 +154,10 @@
 ```bash
 git clone https://github.com/YuanyuanMa03/ai-to-llm-engineer.git
 cd ai-to-llm-engineer
-python3 -m http.server 3000
+python3 -m http.server 4173
 ```
 
-浏览器访问 `http://localhost:3000`。学习进度与实验星仅写入浏览器 `localStorage`，代码在本机浏览器的 Web Worker 中执行，不会上传到本项目的服务器。首次运行需要联网从 CDN 加载 Pyodide 与所需科学计算包。
+浏览器访问 `http://127.0.0.1:4173/`。学习进度与实验星仅写入浏览器 `localStorage`，代码在本机浏览器的 Web Worker 中执行，不会上传到本项目的服务器。首次运行需要联网从 CDN 加载 Pyodide 与所需科学计算包。
 
 维护者可以额外运行零依赖检查：
 
@@ -114,10 +166,27 @@ npm run check
 npm test
 ```
 
+当前质量门槛：4 个 JavaScript 文件通过语法检查，5 项实验台核心测试必须全部通过。仓库没有前端构建产物，Markdown、CSS 与原生 JavaScript 的修改刷新页面即可看到。
+
+## 项目结构
+
+```text
+ai-to-llm-engineer/
+├── 01-fundamentals/ ... 06-frontier/  # 6 阶段课程正文
+├── assets/                            # 手帐主题、游戏进度、实验台与 Worker
+├── quiz/                              # 31 道面试试炼题
+├── tests/                             # 浏览器实验台核心测试
+├── output/playwright/                 # README 使用的真实网页截图
+├── hand-coding.md                     # 10 组手撕代码练习
+├── home.md                            # 冒险地图首页
+├── TEMPLATE.md                        # 新课程写作模板
+└── index.html                         # Docsify 入口
+```
+
 ## 内容与技术
 
 - **教学结构**：课前摸底、直觉解释、可运行实验、课后测验与求职验收。
-- **前端实现**：Docsify、原生 JavaScript、CSS、KaTeX、Prism、[Pyodide](https://pyodide.org/) Web Worker。
+- **前端实现**：Docsify、原生 JavaScript、CSS、KaTeX、Prism、[Pyodide](https://pyodide.org/) Web Worker；零框架构建链，避免“先学课程，还得先修 webpack”。
 - **参考项目**：[Microsoft AI-For-Beginners](https://github.com/microsoft/AI-For-Beginners)；部分手绘知识图来自该项目，并保留来源说明。
 - **原创范围**：围绕大模型工程师求职重新规划的中文课程、工程实践、面试追问、手撕代码与游戏化学习系统，并非原项目的逐章翻译。
 
