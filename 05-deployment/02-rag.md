@@ -215,7 +215,7 @@ print(prompt)
 
 跑一下,你会看到召回排序(由于上面提到的 hash 随机化,具体顺序每次进程可能不同;真实 embedding 模型下,vLLM 那条会稳定排第一)。这就是 RAG 的最朴素形态。生产里把 `fake_embed` 换成真 embedding 模型、把 `chunk_embs` 换成 Milvus/FAISS 检索、把最后那段 prompt 喂给真 LLM,就是可用的 RAG。
 
-> 💡 把代码复制到 [JupyterLite](https://jupyterlite.github.io/demo/) 在线试跑,把 query 换成"Transformer 的注意力公式",看召回排序怎么变。
+> 💡 点「编辑」把 query 换成"Transformer 的注意力公式",再「运行到这里」看召回排序怎么变。
 
 补一段 **top-k 检索 + rerank** 的极简示意:
 

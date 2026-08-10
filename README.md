@@ -29,8 +29,8 @@
 | 你会得到 | 网页里如何实现 |
 |---|---|
 | **一条完整路线** | 6 个阶段、16 个课程关卡，从数学基础到 MCP |
-| **真实学习反馈** | 任务清单、XP、等级、连续学习天数与通关印章 |
-| **能跑的工程练习** | 每课最小实现、在线运行入口与 10 道手撕代码题 |
+| **真实学习反馈** | 任务清单、XP、实验星、等级、连续学习天数与通关印章 |
+| **能跑的工程练习** | 浏览器内 Python 实验台、即时输出/报错/图表与 10 道手撕代码题 |
 | **能讲清的面试能力** | 高频追问、易错点、31 道随机题卡与掌握度自评 |
 | **能写进简历的证据** | 每阶段都给出项目方向、交付物与验收口径 |
 
@@ -46,6 +46,20 @@
 <a href="https://yuanyuanma03.github.io/ai-to-llm-engineer/#/01-fundamentals/01-math">
   <img src="output/playwright/readme-lesson.webp" alt="AI 手帐课程页：教程正文、学习路线与本关任务卡" width="100%">
 </a>
+
+### 代码不再负责“看起来能跑”
+
+每个 Python 代码块都是一格真正的迷你实验室：可以直接编辑、重置和运行。标准库、NumPy、Matplotlib 等代码在浏览器的独立线程中执行，页面不会因为一段计算当场失去意识；输出、异常和图表会原地回贴到手帐。
+
+<a href="https://yuanyuanma03.github.io/ai-to-llm-engineer/#/01-fundamentals/01-math">
+  <img src="output/playwright/readme-code-lab.webp" alt="AI 手帐浏览器 Python 实验台：编辑 NumPy 代码、即时查看输出并获得实验星" width="100%">
+</a>
+
+- 点「运行到这里」会自动补跑本页上方的兼容代码块，跨格变量不会突然失忆。
+- 首次运行按需加载 Python 与科学计算包；之后复跑通常只需数秒。
+- 跑通后自动勾选本关「跑通代码」，首次胜利获得 `+20 XP` 和一颗实验星。
+- 无限循环会触发急停；错误会变成可读的 Bug Boss 面板，而不是一堵红色天书。
+- PyTorch、Transformers、MCP Server 等重型或服务端依赖会明确标记为「云端关卡」，仍可编辑和复制，不会假装浏览器什么都能炼。
 
 ### 每一关都有明确的学习闭环
 
@@ -91,12 +105,19 @@ cd ai-to-llm-engineer
 python3 -m http.server 3000
 ```
 
-浏览器访问 `http://localhost:3000`。学习进度仅写入浏览器 `localStorage`，不会上传个人数据。
+浏览器访问 `http://localhost:3000`。学习进度与实验星仅写入浏览器 `localStorage`，代码在本机浏览器的 Web Worker 中执行，不会上传到本项目的服务器。首次运行需要联网从 CDN 加载 Pyodide 与所需科学计算包。
+
+维护者可以额外运行零依赖检查：
+
+```bash
+npm run check
+npm test
+```
 
 ## 内容与技术
 
 - **教学结构**：课前摸底、直觉解释、可运行实验、课后测验与求职验收。
-- **前端实现**：Docsify、原生 JavaScript、CSS、KaTeX、Prism。
+- **前端实现**：Docsify、原生 JavaScript、CSS、KaTeX、Prism、[Pyodide](https://pyodide.org/) Web Worker。
 - **参考项目**：[Microsoft AI-For-Beginners](https://github.com/microsoft/AI-For-Beginners)；部分手绘知识图来自该项目，并保留来源说明。
 - **原创范围**：围绕大模型工程师求职重新规划的中文课程、工程实践、面试追问、手撕代码与游戏化学习系统，并非原项目的逐章翻译。
 

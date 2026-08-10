@@ -210,7 +210,7 @@ trainer = Trainer(
 trainer.train()
 ```
 
-> 💡 把代码复制到 [JupyterLite](https://jupyterlite.github.io/demo/lab/index.html) 在线试跑
+> ☁️ 这段依赖 PyTorch / Transformers，网页实验台会标记为「云端关卡」。复制到带 GPU 的本地或云端 Notebook 再运行，密钥不要写进网页。
 
 ## ⚠️ 易错点 / 面试陷阱
 

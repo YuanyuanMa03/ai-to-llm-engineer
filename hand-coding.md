@@ -5,7 +5,7 @@
 
 这不是 LeetCode 算法题(反转链表、最长子串那种),而是 **ML / DL 相关的实现题**:softmax、attention、layer norm、LoRA……面试官想看的不是你刷过多少题,而是你**真的理解这些组件每一行在干什么**,而不是只会 `import torch.nn`。
 
-选题参考了 [bbruceyuan/AI-Interview-Code](https://github.com/bbruceyuan/AI-Interview-Code) 的思路,并按本教程的五个阶段重新归类。代码用 **numpy 手写**(面试白板不让 import PyTorch),每段都在 20 行内,可以直接复制到 [JupyterLite](https://jupyterlite.github.io/demo/) 跑通。
+选题参考了 [bbruceyuan/AI-Interview-Code](https://github.com/bbruceyuan/AI-Interview-Code) 的思路,并按本教程的五个阶段重新归类。代码用 **numpy 手写**(面试白板不让 import PyTorch),每段都可以直接在下方实验台里编辑、运行和验收。
 
 ---
 
@@ -464,10 +464,10 @@ def react_agent(query, llm_call, tools, max_steps=5):
 
 # 验证:mock 一个 LLM 和一个 calculator 工具
 def mock_llm(prompt):
-    if "2 * 3" in prompt or "2*3" in prompt:
-        return "I need to calculate. Action: calculator(2*3)"
     if "calculator(2*3)" in prompt and "Observation: 6" in prompt:
         return "2*3=6, so the answer is 6. FINISH: 6"
+    if "2 * 3" in prompt or "2*3" in prompt:
+        return "I need to calculate. Action: calculator(2*3)"
     return "Action: calculator(2*3)"
 
 tools = {"calculator": lambda expr: str(eval(expr))}

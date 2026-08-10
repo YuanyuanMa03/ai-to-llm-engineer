@@ -179,7 +179,7 @@ for t in range(n_tokens):
 
 跑一遍你会看到不同 token 选了不同专家组合——这就是稀疏激活的本质。把 `top_k` 改成 `n_experts` 就是 Dense FFN。
 
-> 💡 把代码复制到 [JupyterLite](https://jupyterlite.github.io/demo/) 在线试跑,改 `n_experts` 和 `top_k`,观察路由分布。
+> 💡 点「编辑」改 `n_experts` 和 `top_k`,再「运行到这里」观察路由分布。
 
 ## ⚠️ 易错点 / 面试陷阱
 

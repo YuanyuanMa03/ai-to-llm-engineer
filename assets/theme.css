@@ -525,6 +525,301 @@ select:focus-visible {
   background: rgba(255, 255, 255, 0.16);
 }
 
+/* Browser Python lab */
+.code-lab {
+  position: relative;
+  scroll-margin-top: calc(var(--topbar) + 14px);
+  margin: 26px 0 32px;
+  overflow: hidden;
+  color: #dce8f7;
+  background: #0d1d31;
+  border: 1px solid rgba(13, 29, 49, 0.82);
+  border-radius: 7px;
+  box-shadow: 0 12px 26px rgba(13, 29, 49, 0.2), 5px 6px 0 rgba(239, 74, 67, 0.2);
+  transition: box-shadow 180ms ease, transform 180ms ease;
+}
+
+.code-lab.is-highlighted {
+  box-shadow: 0 0 0 5px rgba(247, 216, 102, 0.78), 7px 9px 0 var(--red);
+  transform: rotate(-0.15deg);
+}
+
+.code-lab__toolbar {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 7px 9px 7px 14px;
+  background: #142740;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.code-lab__identity,
+.code-lab__actions {
+  display: flex;
+  align-items: center;
+}
+
+.code-lab__identity {
+  min-width: 0;
+  gap: 8px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+
+.code-lab__identity b {
+  color: #fff;
+  white-space: nowrap;
+}
+
+.code-lab__light {
+  flex: 0 0 auto;
+  width: 9px;
+  height: 9px;
+  background: #8ca0b6;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.13);
+}
+
+.code-lab[data-state="running"] .code-lab__light {
+  background: var(--yellow);
+  animation: lab-pulse 1s ease-in-out infinite alternate;
+}
+
+.code-lab[data-state="success"] .code-lab__light {
+  background: #4ed39c;
+}
+
+.code-lab[data-state="error"] .code-lab__light,
+.code-lab[data-state="cancelled"] .code-lab__light {
+  background: #ff6b65;
+}
+
+@keyframes lab-pulse {
+  to { box-shadow: 0 0 0 5px rgba(247, 216, 102, 0.18); }
+}
+
+.code-lab__status {
+  max-width: 250px;
+  overflow: hidden;
+  color: #9eb1c7;
+  font-size: 10px;
+  letter-spacing: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.code-lab__actions {
+  flex: 0 0 auto;
+  gap: 5px;
+}
+
+.code-lab__actions button {
+  min-height: 32px;
+  padding: 5px 9px;
+  color: #dce8f7;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.code-lab__actions button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.code-lab__actions .code-lab__run {
+  min-width: 100px;
+  color: var(--ink);
+  background: var(--yellow);
+  border-color: var(--yellow);
+  font-weight: 900;
+}
+
+.code-lab__actions .code-lab__run:hover:not(:disabled) {
+  background: #ffe783;
+}
+
+.code-lab__actions button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.code-lab[data-state="running"] .code-lab__actions .code-lab__run {
+  color: #fff;
+  background: var(--red);
+  border-color: var(--red);
+}
+
+.markdown-section .code-lab > pre.code-lab__source {
+  margin: 0;
+  padding: 22px;
+  overflow: auto;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.markdown-section .code-lab > pre.code-lab__source::before {
+  display: none;
+}
+
+.code-lab__editor {
+  display: block;
+  width: 100%;
+  min-height: 170px;
+  margin: 0;
+  padding: 22px;
+  resize: vertical;
+  color: #e6f0fb;
+  background: #0a1829;
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 13px;
+  line-height: 1.72;
+  tab-size: 4;
+}
+
+.code-lab__editor[hidden] {
+  display: none;
+}
+
+.code-lab__editor:focus {
+  box-shadow: inset 0 0 0 2px rgba(247, 216, 102, 0.75);
+}
+
+.code-lab__notice {
+  margin: 0;
+  padding: 11px 16px;
+  color: #f7dca1;
+  background: rgba(189, 48, 47, 0.18);
+  border-top: 1px dashed rgba(255, 255, 255, 0.12);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.code-lab__output {
+  padding: 15px 17px 13px;
+  color: var(--ink);
+  background-color: #f8f5ec;
+  background-image:
+    linear-gradient(rgba(35, 83, 120, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(35, 83, 120, 0.055) 1px, transparent 1px);
+  background-size: 20px 20px;
+  border-top: 4px solid var(--teal);
+}
+
+.code-lab__output[hidden] {
+  display: none;
+}
+
+.code-lab__loading,
+.code-lab__quiet-success,
+.code-lab__cancelled,
+.code-lab__error-hint,
+.code-lab__output-meta {
+  margin: 0;
+}
+
+.code-lab__loading {
+  padding: 9px 5px;
+  color: var(--blue);
+  font-family: var(--font-note);
+  font-size: 15px;
+}
+
+.code-lab__output-block {
+  margin-bottom: 12px;
+}
+
+.code-lab__output-block strong {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--teal);
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+}
+
+.markdown-section .code-lab__output-block > pre {
+  max-height: 330px;
+  margin: 0;
+  padding: 13px 15px;
+  overflow: auto;
+  color: #dce8f7;
+  background: #102238;
+  border-radius: 4px;
+  box-shadow: none;
+  font-size: 12px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+
+.markdown-section .code-lab__output-block > pre::before {
+  display: none;
+}
+
+.code-lab__output-block--error strong {
+  color: var(--red-dark);
+}
+
+.markdown-section .code-lab__output-block--error > pre {
+  color: #681f25;
+  background: #f9dddd;
+  border-left: 4px solid var(--red);
+}
+
+.code-lab__quiet-success {
+  padding: 11px 13px;
+  color: #145b51;
+  background: #dff3e9;
+  border-left: 4px solid var(--teal);
+  font-size: 13px;
+}
+
+.code-lab__cancelled {
+  padding: 11px 13px;
+  color: #68450d;
+  background: #fff0b6;
+  border-left: 4px solid #d8a21e;
+  font-size: 13px;
+}
+
+.code-lab__error-hint {
+  color: #6f4038;
+  font-family: var(--font-note);
+  font-size: 13px;
+}
+
+.code-lab__figure {
+  margin: 12px 0;
+  padding: 10px;
+  background: #fff;
+  border: 1px solid rgba(16, 41, 77, 0.16);
+  border-radius: 4px;
+}
+
+.markdown-section .code-lab__figure img {
+  display: block;
+  max-width: 100%;
+  margin: 0 auto;
+  box-shadow: none;
+}
+
+.code-lab__output-meta {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 10px;
+  text-align: right;
+}
+
 .markdown-section table {
   display: table;
   width: 100%;
@@ -791,11 +1086,13 @@ select:focus-visible {
   padding: 10px 15px;
   color: #fff;
   background: var(--ink);
+  border: 0;
   border-radius: 5px;
   box-shadow: 4px 5px 0 var(--red);
   font-size: 12px;
   font-weight: 850;
   text-decoration: none;
+  cursor: pointer;
   transition: 150ms ease;
 }
 
@@ -1507,6 +1804,45 @@ select:focus-visible {
   .markdown-section pre {
     margin-right: -8px;
     margin-left: -8px;
+  }
+
+  .code-lab {
+    margin-right: -8px;
+    margin-left: -8px;
+  }
+
+  .code-lab__toolbar {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 7px;
+    padding: 9px;
+  }
+
+  .code-lab__identity {
+    padding: 0 3px;
+  }
+
+  .code-lab__status {
+    max-width: none;
+  }
+
+  .code-lab__actions {
+    display: grid;
+    grid-template-columns: minmax(112px, 1.5fr) repeat(3, 1fr);
+  }
+
+  .code-lab__actions button,
+  .code-lab__actions .code-lab__run {
+    min-width: 0;
+    padding-right: 6px;
+    padding-left: 6px;
+  }
+
+  .markdown-section .code-lab > pre.code-lab__source,
+  .code-lab__editor {
+    margin: 0;
+    padding: 18px 15px;
+    font-size: 12px;
   }
 
   .is-lesson .markdown-section::before {

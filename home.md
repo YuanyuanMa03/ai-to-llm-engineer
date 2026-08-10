@@ -3,7 +3,7 @@
 <div class="hero-spread">
   <section class="hero-copy">
     <h2>把大模型，<br>学成你的主线任务。</h2>
-    <p>不是收藏夹吃灰指南。16 个关卡，从梯度下降一路打到 Agent；每关都留下能讲、能跑、能写进简历的战利品。</p>
+    <p>不是收藏夹吃灰指南。16 个关卡，从梯度下降一路打到 Agent；Python 直接在网页里运行，每关都留下能讲、能跑、能写进简历的战利品。</p>
     <div class="hero-actions">
       <a class="journal-button" href="#/01-fundamentals/01-math" data-today-link><span data-continue-label>开始第 1 关</span> →</a>
       <a class="journal-button journal-button--ghost" href="#/?id=adventure-map">先看冒险地图</a>
@@ -16,7 +16,7 @@
       <p class="progress-note__label">我的进度</p>
       <div class="progress-note__row">
         <strong data-home-level>Lv.1 张量见习生</strong>
-        <span data-home-xp>0 / 1600 XP</span>
+        <span data-home-xp>0 XP · 0 实验星</span>
       </div>
       <div class="progress-note__bar" aria-hidden="true"><i data-home-progress-bar></i></div>
       <p class="progress-note__streak">▣ <span data-home-streak>连续学习 0 天</span> · 已完成 <span data-home-completed>0 / 16 关</span></p>
@@ -96,7 +96,7 @@
         <div class="daily-meta">
           <span>◷ 预计 25 分钟</span>
           <span>☑ 随堂小测</span>
-          <span>⌁ 可运行代码</span>
+          <span>⌁ 浏览器内即时运行</span>
         </div>
         <a class="journal-button" href="#/01-fundamentals/01-math" data-today-link>开始学习 →</a>
       </article>
@@ -111,7 +111,7 @@
   <ul class="loot-strip">
     <li><b>系统掌握 LLM 全流程</b><span>从原理到工程落地，不再只会背名词。</span></li>
     <li><b>面试有底气</b><span>每关都配八股、手撕与追问题。</span></li>
-    <li><b>能讲能跑的战利品</b><span>代码、实验和项目证据都能拿出来。</span></li>
+    <li><b>能讲能跑的战利品</b><span>网页内编辑、运行、看图表，跑通自动拿实验星。</span></li>
     <li><b>简历亮点</b><span>把“学过”换成可复现、可验收的项目。</span></li>
   </ul>
   <p class="source-note">教学结构与部分手绘素材参考 <a href="https://github.com/microsoft/AI-For-Beginners" target="_blank" rel="noopener">Microsoft AI-For-Beginners</a>（MIT）；本教程面向大模型工程师求职场景重新组织与创作。</p>
