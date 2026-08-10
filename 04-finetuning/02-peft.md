@@ -201,7 +201,7 @@ model.print_trainable_parameters()
 # 输出:trainable params: 6,553,600 || all params: 7,621,358,592 || trainable%: 0.09%
 ```
 
-> 💡 把代码复制到 [JupyterLite](https://jupyterlite.github.io/demo/lab/index.html) 在线试跑
+> 💡 NumPy 版 LoRA 可以直接在网页实验台跑；QLoRA 版依赖 Transformers / PEFT / GPU，会自动提示转到云端环境。
 
 ## ⚠️ 易错点 / 面试陷阱
 

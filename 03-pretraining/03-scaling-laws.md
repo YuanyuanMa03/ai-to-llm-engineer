@@ -155,7 +155,7 @@ print("曲线已保存为 scaling_law.png")
 
 你会看到两条都是平滑下降的幂律曲线,Chinchilla 在同样算力下 loss 更低(因为数据配比更优)。这就是「数据配方调整」带来的「免费」提升——不增加算力,只调 $N$:$D$ 比例。
 
-> 💡 把代码复制到 [JupyterLite](https://jupyterlite.github.io/demo/) 在线试跑,改 `alpha` 看 loss 下降快慢的变化。
+> 💡 点「运行到这里」,曲线会直接贴在代码下方。改 `alpha` 后重跑,观察 loss 下降速度。
 
 ## ⚠️ 易错点 / 面试陷阱
 

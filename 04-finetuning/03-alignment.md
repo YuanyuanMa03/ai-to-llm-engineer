@@ -204,7 +204,7 @@ adv   = torch.tensor([1.0, -0.5, 0.8, 1.2])
 print(f"PPO objective: {ppo_clip_objective(ratio, adv):.4f}")
 ```
 
-> 💡 把代码复制到 [JupyterLite](https://jupyterlite.github.io/demo/lab/index.html) 在线试跑
+> ☁️ 这组损失函数依赖 PyTorch，网页实验台会保留可编辑与复制能力，并提示使用本地或 GPU Notebook 运行。
 
 ## ⚠️ 易错点 / 面试陷阱
 

@@ -189,14 +189,14 @@ tools = {"calculator": calculator, "search": search}
 # === 2. 模拟 LLM(真实场景调 OpenAI / 开源模型) ===
 # 这里用规则模拟,生产换成 llm(prompt) -> str
 def fake_llm(prompt):
-    if "首都" in prompt and "人口" not in prompt:
+    if "Observation: 2520000" in prompt:
+        return 'Thought: 数字算完了,可以交卷。\nAction: Finish[巴黎市区人口乘以 1.2 约为 252 万]'
+    if "Observation: 巴黎市区人口约 210 万" in prompt:
+        return 'Thought: 已拿到人口,还要乘以 1.2。\nAction: calculator[2100000 * 1.2]'
+    if "Observation: 法国首都是巴黎" in prompt:
+        return 'Thought: 首都是巴黎,继续查人口。\nAction: search[巴黎人口]'
+    if "首都" in prompt:
         return 'Thought: 我需要查法国首都是哪。\nAction: search[法国首都]'
-    if "人口" in prompt:
-        return 'Thought: 我需要查巴黎人口。\nAction: search[巴黎人口]'
-    if "×" in prompt or "*" in prompt:
-        match = re.search(r'(calc|计算)\s*[:：]?\s*([\d\+\-\*\/\s\(\)]+)', prompt)
-        expr = match.group(2).strip() if match else "2100000 * 1.2"
-        return f'Thought: 我需要算一下。\nAction: calculator[{expr}]'
     return 'Thought: 信息够了,可以回答。\nAction: Finish[完成]'
 ```
 
@@ -231,7 +231,7 @@ print(f"\n最终答案: {answer}")
 
 跑起来你会看到 Agent 走完 `search → search → calculator → Finish` 完整链路,**这就是 Agent 的本质——LLM 决策 + 工具执行 + 循环**。生产里把 `fake_llm` 换成真模型、把工具换成真 API,就是可用 Agent。
 
-> 💡 把代码复制到 [JupyterLite](https://jupyterlite.github.io/demo/) 在线试跑。试着加一个新工具(比如 `weather`),让 Agent 回答"巴黎今天天气如何"。
+> 💡 点「运行到这里」走完 Agent 循环。试着加一个新工具(比如 `weather`),让 Agent 回答"巴黎今天天气如何"。
 
 ## ⚠️ 易错点 / 面试陷阱
 

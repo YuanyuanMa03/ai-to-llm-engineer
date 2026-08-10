@@ -117,7 +117,7 @@ train_idx, val_idx, test_idx = idx[:60], idx[60:80], idx[80:]
 print(f'训练 {len(train_idx)} / 验证 {len(val_idx)} / 测试 {len(test_idx)}')
 ```
 
-> 💡 把代码复制到 [JupyterLite](https://jupyterlite.github.io/demo/lab/index.html) 在线试跑
+> 💡 点「运行到这里」即可在浏览器里试跑；把 `k` 改成 1 或 4，观察预测如何变化。
 
 ## ⚠️ 易错点 / 面试陷阱
 

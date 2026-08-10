@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f5f0e5">
   <title>AI 手帐 · 大模型工程师冒险地图</title>
-  <meta name="description" content="16 个可通关关卡，从数学基础、Transformer 到 RAG、Agent 与 MCP，把大模型知识变成能跑、能讲、能写进简历的工程战利品。">
+  <meta name="description" content="16 个可通关关卡，浏览器内直接运行 Python，从数学基础、Transformer 到 RAG、Agent 与 MCP，把大模型知识变成能跑、能讲、能写进简历的工程战利品。">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/themes/vue.css">
-  <link rel="stylesheet" href="assets/theme.css">
+  <link rel="stylesheet" href="assets/theme.css?v=interactive-lab-4">
 </head>
 <body>
   <header class="journal-topbar" aria-label="主导航">
@@ -26,7 +26,7 @@
     <button class="player-progress" id="playerProgress" type="button" aria-label="查看学习进度">
       <span class="player-progress__level" data-player-level>Lv.1 张量见习生</span>
       <span class="player-progress__track" aria-hidden="true"><i data-player-progress-bar></i></span>
-      <span class="player-progress__xp" data-player-xp>0 / 1600 XP</span>
+      <span class="player-progress__xp" data-player-xp>0 XP · 0 实验星</span>
     </button>
   </header>
 
@@ -57,12 +57,14 @@
 
   <div class="achievement-toast" id="achievementToast" role="status" aria-live="polite"></div>
 
-  <a class="run-fab" href="https://jupyterlite.github.io/demo/lab/index.html" target="_blank" rel="noopener" title="打开 JupyterLite 在线 Python 环境">
+  <button class="run-fab" id="openFirstLab" type="button" aria-label="跳到本页第一个 Python 实验" title="跳到本页第一个 Python 实验">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 10 7-10 7V5Z"/></svg>
-    <span>运行代码</span>
-  </a>
+    <span>打开实验台</span>
+  </button>
 
-  <script src="assets/app.js"></script>
+  <script src="assets/code-lab-core.js?v=interactive-lab-4"></script>
+  <script src="assets/app.js?v=interactive-lab-4"></script>
+  <script src="assets/code-lab.js?v=interactive-lab-4"></script>
   <script>
     window.$docsify = {
       name: 'AI 手帐',

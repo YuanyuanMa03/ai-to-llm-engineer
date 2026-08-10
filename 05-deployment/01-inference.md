@@ -226,7 +226,7 @@ mem = kv_cache_bytes(num_layers=40, num_kv_heads=40, head_dim=128,
 print(f"KV Cache: {mem/1024**3:.2f} GB")  # 看 batch=8 时多大
 ```
 
-> 💡 把代码复制到 [JupyterLite](https://jupyterlite.github.io/demo/) 在线试跑,把 `seq_len` 从 512 调到 8192,看显存怎么爆。
+> 💡 点「编辑」把 `seq_len` 从 512 调到 8192,再「运行到这里」看显存怎么爆。
 
 ## ⚠️ 易错点 / 面试陷阱
 

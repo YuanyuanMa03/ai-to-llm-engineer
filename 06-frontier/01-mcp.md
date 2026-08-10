@@ -210,7 +210,7 @@ print("Server → Client:", json.dumps(result, ensure_ascii=False))
 
 这段揭示了 MCP 的本质:**就是一堆约定好格式的 JSON-RPC 消息来回传**。所有花哨的 SDK,底层都是这个。
 
-> 💡 把代码复制到 [JupyterLite](https://jupyterlite.github.io/demo/) 在线试跑。第 3 段纯标准库,直接能跑,帮你建立对协议的直觉。
+> 💡 MCP Server 示例会提示使用本地环境；协议模拟是纯标准库，直接点「运行到这里」就能建立直觉。
 
 ---
 

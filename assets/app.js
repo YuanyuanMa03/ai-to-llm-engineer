@@ -4,7 +4,8 @@
   var STORAGE = {
     completed: 'ai-journal-completed-v2',
     quests: 'ai-journal-quests-v2',
-    streak: 'ai-journal-streak-v2'
+    streak: 'ai-journal-streak-v2',
+    labs: 'ai-journal-labs-v1'
   };
 
   var LESSONS = [
@@ -73,6 +74,11 @@
     });
   }
 
+  function getLabWins() {
+    var wins = readJSON(STORAGE.labs, {});
+    return wins && typeof wins === 'object' && !Array.isArray(wins) ? wins : {};
+  }
+
   function getQuestState(path) {
     var quests = readJSON(STORAGE.quests, {});
     return quests[path] || { read: false, code: false, interview: false };
@@ -86,7 +92,9 @@
 
   function getPlayer(completed) {
     var count = completed.length;
-    var xp = count * 100;
+    var labWins = getLabWins();
+    var stars = Object.keys(labWins).length;
+    var xp = count * 100 + stars * 20;
     var level = 1;
     var title = '张量见习生';
 
@@ -98,6 +106,7 @@
     return {
       count: count,
       xp: xp,
+      stars: stars,
       level: level,
       title: title,
       percent: Math.round((count / LESSONS.length) * 100)
@@ -133,7 +142,7 @@
     var player = getPlayer(completed);
     var label = 'Lv.' + player.level + ' ' + player.title;
     setText('[data-player-level]', label);
-    setText('[data-player-xp]', player.xp + ' / ' + (LESSONS.length * 100) + ' XP');
+    setText('[data-player-xp]', player.xp + ' XP · ' + player.stars + ' 实验星');
     document.querySelectorAll('[data-player-progress-bar]').forEach(function (bar) {
       bar.style.width = player.percent + '%';
     });
@@ -157,7 +166,7 @@
     setText('[data-today-objective]', allComplete ? '用 31 道题把最后的知识漏洞揪出来。' : next.objective);
     setText('[data-continue-label]', allComplete ? '去最终试炼' : (completed.length ? '继续 ' + next.code : '开始第 1 关'));
     setText('[data-home-level]', 'Lv.' + player.level + ' ' + player.title);
-    setText('[data-home-xp]', player.xp + ' / ' + (LESSONS.length * 100) + ' XP');
+    setText('[data-home-xp]', player.xp + ' XP · ' + player.stars + ' 实验星');
     setText('[data-home-streak]', '连续学习 ' + streak.count + ' 天');
     document.querySelectorAll('[data-home-progress-bar]').forEach(function (bar) {
       bar.style.width = player.percent + '%';
@@ -265,6 +274,7 @@
 
   function addCopyButtons() {
     document.querySelectorAll('.markdown-section pre').forEach(function (pre) {
+      if (pre.closest('.code-lab')) return;
       if (pre.querySelector('.copy-code-button')) return;
       var button = document.createElement('button');
       button.type = 'button';
@@ -327,7 +337,34 @@
 
     updatePlayerUI();
     if (isHome) updateHomeUI();
+    if (window.AICodeLab && article) window.AICodeLab.enhance(article, currentPath);
     addCopyButtons();
+  }
+
+  function recordCodeSuccess(detail) {
+    if (!detail || !detail.labId) return;
+    var wins = getLabWins();
+    var firstWin = !wins[detail.labId];
+    wins[detail.labId] = {
+      path: normalizePath(detail.path),
+      changed: Boolean(detail.changed),
+      completedAt: new Date().toISOString()
+    };
+    writeJSON(STORAGE.labs, wins);
+
+    var lessonPath = normalizePath(detail.path);
+    if (getLesson(lessonPath)) {
+      var state = getQuestState(lessonPath);
+      state.code = true;
+      setQuestState(lessonPath, state);
+      if (currentPath === lessonPath) updateQuestRail(lessonPath);
+    }
+
+    updatePlayerUI();
+    if (currentPath === '/') updateHomeUI();
+    showToast(firstWin
+      ? '实验跑通！+20 XP · “跑通代码”已自动打勾'
+      : '复跑成功！这次 Python 也没有临时请假');
   }
 
   window.aiJournalPlugin = function (hook, vm) {
@@ -364,12 +401,23 @@
   };
 
   setupQuestEvents();
+  document.addEventListener('ai-journal:code-success', function (event) {
+    recordCodeSuccess(event.detail);
+  });
   updatePlayerUI();
 
   var progressButton = document.getElementById('playerProgress');
   if (progressButton) {
     progressButton.addEventListener('click', function () {
       window.location.hash = '/?id=adventure-map';
+    });
+  }
+
+  var labButton = document.getElementById('openFirstLab');
+  if (labButton) {
+    labButton.addEventListener('click', function () {
+      if (window.AICodeLab) window.AICodeLab.scrollToFirst();
+      else window.location.hash = '/hand-coding';
     });
   }
 

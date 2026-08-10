@@ -62,7 +62,7 @@
 <body>
 <div class="quiz-topbar">
   <a href="../">← AI 手帐 · 返回学习地图</a>
-  <span id="quizPlayer">Lv.1 张量见习生 · 0 / 1600 XP</span>
+  <span id="quizPlayer">Lv.1 张量见习生 · 0 XP · 0 实验星</span>
 </div>
 <div class="container">
   <main class="quiz-book">
@@ -281,14 +281,18 @@ document.getElementById('diffFilter').addEventListener('change',()=>{buildPool()
 // 初始化
 function updatePlayer(){
   let completed=[];
+  let labWins={};
   try{completed=JSON.parse(localStorage.getItem('ai-journal-completed-v2')||'[]')}catch(e){}
+  try{labWins=JSON.parse(localStorage.getItem('ai-journal-labs-v1')||'{}')}catch(e){}
+  if(!labWins||typeof labWins!=='object'||Array.isArray(labWins))labWins={};
   const count=completed.length;
+  const stars=Object.keys(labWins).length;
   let level=1,title='张量见习生';
   if(count>=4){level=2;title='注意力驯服者'}
   if(count>=8){level=3;title='对齐炼金师'}
   if(count>=12){level=4;title='Agent 工程师'}
   if(count>=16){level=5;title='全栈大模型勇者'}
-  document.getElementById('quizPlayer').textContent=`Lv.${level} ${title} · ${count*100} / 1600 XP`;
+  document.getElementById('quizPlayer').textContent=`Lv.${level} ${title} · ${count*100+stars*20} XP · ${stars} 实验星`;
 }
 
 buildPool();

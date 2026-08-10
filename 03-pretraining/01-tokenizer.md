@@ -163,7 +163,7 @@ for i, m in enumerate(merges, 1):
 
 运行后你会看到 BPE 先合并 `e + s`(因为 newest/widest 共享),再合并 `est + </w>`,体现了「高频片段优先成词」。把它和 HuggingFace 的 `tokenizers.Tokenizer(models.BPE(...))` 对比,原理完全一致。
 
-> 💡 把代码复制到 [JupyterLite](https://jupyterlite.github.io/demo/) 在线试跑,改 `vocab` 里的词和频次,看合并顺序怎么变。
+> 💡 点「编辑」改 `vocab` 里的词和频次,再「运行到这里」看合并顺序怎么变。
 
 ## ⚠️ 易错点 / 面试陷阱
 

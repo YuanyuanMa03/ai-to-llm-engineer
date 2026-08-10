@@ -98,7 +98,7 @@ $$
 
 ## 代码:最小实现
 
-下面三段代码可以直接跑。打开 [JupyterLite](https://jupyterlite.github.io/demo/) 粘贴试运行。
+下面三段代码可以直接在网页里跑。点「编辑」改参数,再按「运行到这里」查看即时输出。
 
 **① 矩阵 = 线性变换**
 
@@ -140,7 +140,7 @@ h = 1e-6
 print(f"数值导数 = {(np.sin((x+h)**2) - np.sin(x**2))/h:.4f}")
 ```
 
-> 💡 把代码复制到 [JupyterLite](https://jupyterlite.github.io/demo/lab/index.html) 在线试跑
+> 💡 这三格共享本页运行环境。可以从任意一格点「运行到这里」,实验台会自动补跑它上方的代码。
 
 ## ⚠️ 易错点 / 面试陷阱
 

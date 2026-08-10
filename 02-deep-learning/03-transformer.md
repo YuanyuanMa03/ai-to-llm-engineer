@@ -153,7 +153,7 @@ print("causal weights:\n", w_c)
 # token1 看不到 token2,第一行 = [1.0, 0.0]
 ```
 
-> 💡 把代码复制到 [JupyterLite](https://jupyterlite.github.io/demo/) 在线试跑。把 `d_k` 改成 512,再去掉 `/np.sqrt(d_k)`,打印 `weights`,你会看到 softmax 退化成 one-hot —— 直观感受"为什么要缩放"。
+> 💡 点「运行到这里」在线试跑。把 `d_k` 改成 512,再去掉 `/np.sqrt(d_k)`,打印 `weights`,你会看到 softmax 退化成 one-hot —— 直观感受"为什么要缩放"。
 
 ## ⚠️ 易错点 / 面试陷阱
 
